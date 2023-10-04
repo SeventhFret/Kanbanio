@@ -1,0 +1,18 @@
+.flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position:static;
+}
+
+.f-c {
+    flex-direction: column;
+}
+
+.f-r {
+    flex-direction: row;
+}
+
+.section {
+    min-height: 100vh;
+}

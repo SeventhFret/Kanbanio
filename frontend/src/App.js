@@ -1,24 +1,26 @@
-import logo from './logo.svg';
 import './App.css';
+import { Routes, Route } from 'react-router-dom';
+import { Home } from './pages/Home';
+import { LoginForm } from './pages/Login';
+import { SignUpForm } from './pages/SignUp';
+
 
 function App() {
+  const accessToken = localStorage.getItem("access");
+  const refreshToken = localStorage.getItem("refresh");
+  let loggedIn = false;
+
+  if (accessToken || refreshToken) {
+    loggedIn = true;
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Routes>
+      <Route path="/" element={<Home loggedIn={loggedIn} />} />
+      <Route path="/login/" element={<LoginForm loggedIn={loggedIn} />} />
+      <Route path="/register/" element={<SignUpForm loggedIn={loggedIn} />} />
+
+    </Routes>
   );
 }
 
