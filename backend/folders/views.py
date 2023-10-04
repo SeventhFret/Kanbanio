@@ -1,4 +1,3 @@
-from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ModelViewSet
 from .serializers import FolderSerializer
 from .models import Folder

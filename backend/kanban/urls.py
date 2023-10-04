@@ -23,7 +23,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("users/", include("authentication.urls")),
     path("notes/", include("notes.urls")),
-    path("folder/", include("folders.urls"))
+    path("folder/", include("folders.urls")),
+    path("todo/", include('todos.urls'))
 ]
 
 if settings.DEBUG:
