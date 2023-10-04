@@ -7,7 +7,6 @@ from .models import Folder
 class FolderViewSet(ModelViewSet):
     queryset = Folder.objects.all()
     serializer_class = FolderSerializer
-    # permission_classes = [AllowAny]
     
     def get_queryset(self):
         user = self.request.user

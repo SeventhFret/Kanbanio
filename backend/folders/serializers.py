@@ -5,4 +5,4 @@ from .models import Folder
 class FolderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Folder
-        fields = ["user", "title", "type"]
+        fields = ["id", "user", "title", "type"]
