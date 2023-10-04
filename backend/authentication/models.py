@@ -1,7 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
 
 
-class UserProfile(AbstractUser):
+class Profile(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     avatar = models.ImageField(upload_to="avatars", default="default.png")
 
