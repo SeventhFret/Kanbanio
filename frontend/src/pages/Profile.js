@@ -1,5 +1,4 @@
 import SideBar from "../components/SideBar";
-import logo from "../../public/logo.svg";
 import { Typography } from "@mui/material";
 import { Box } from "@mui/material";
 import Divider from "@mui/material/Divider";
@@ -10,10 +9,11 @@ import { getAvatarPath } from "../components/Utils";
 import { NavBar } from "../components/UpperNavBar";
 import { useEffect, useState } from "react";
 import { api } from "../components/ApiClient";
+import Alert from "@mui/material/Alert";
+
 
 export function ProfilePage({ userData, loggedIn }) {
     const [avatarUrl, setAvatarUrl] = useState("");
-    const [errors, setErrors] = useState([]);
     const [messages, setMessages] = useState([]);
     let formData = new FormData();
 
@@ -36,7 +36,7 @@ export function ProfilePage({ userData, loggedIn }) {
                 "Content-Type": "multipart/form-data"
             }
         })
-        .then(resp => {console.log(resp);})
+        .then(resp => {setMessages(resp.data.messages)})
         .catch(error => {console.log(error);})
 
     }
@@ -74,13 +74,21 @@ export function ProfilePage({ userData, loggedIn }) {
                                 <input onChange={submitPhoto} type="file" hidden accept="image/png"></input>
                             </Button>
                             </form>
+                            { messages.map((message) => (
+                                <Alert>{message}</Alert>
+                            )) }
                         </Box>
                     </Box>
 
                     <Box display='flex' flexDirection='column' gap={2}>
+                        { userData ? 
+                        <>
                         <Typography variant="h4">First name: {userData['first_name']}</Typography>
                         <Typography variant="h4">Last name: {userData['last_name']}</Typography>
                         <Typography variant="h4">Email: {userData['email']}</Typography>
+                        </>
+                        : null
+                    }
                     </Box>
                 </Box>
             )

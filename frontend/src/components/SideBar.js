@@ -1,5 +1,6 @@
 import * as React from 'react';
 import "./SideBar.css";
+import logo from "../logo.png";
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -99,6 +100,7 @@ export default function SideBar({ userData, mainContent }) {
         { open ? 
             <DrawerHeader>
                 <Box alignItems="center" display="flex" flexGrow={1}>
+                  <img src={logo} alt="Kanbanio logo" style={{ width: '2vw' }}></img>
                     <Typography sx={{ pl: 2 }} flexGrow={1} variant='h5'>Kanbanio</Typography>
                     <IconButton onClick={handleDrawerClose}>
                         <ChevronLeftIcon />
@@ -108,7 +110,8 @@ export default function SideBar({ userData, mainContent }) {
         :
         <DrawerHeader>
           <IconButton onClick={handleDrawerOpen}>
-            <ChevronRightIcon />
+            <img src={logo} alt="Kanbanio logo" style={{ width: '2vw' }}></img>
+            {/* <ChevronRightIcon /> */}
           </IconButton>
         </DrawerHeader> 
         }
