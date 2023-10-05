@@ -1,4 +1,5 @@
 import SideBar from "../components/SideBar";
+import logo from "../../public/logo.svg";
 import { Typography } from "@mui/material";
 import { Box } from "@mui/material";
 import Divider from "@mui/material/Divider";
@@ -8,15 +9,38 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { getAvatarPath } from "../components/Utils";
 import { NavBar } from "../components/UpperNavBar";
 import { useEffect, useState } from "react";
+import { api } from "../components/ApiClient";
 
 export function ProfilePage({ userData, loggedIn }) {
     const [avatarUrl, setAvatarUrl] = useState("");
+    const [errors, setErrors] = useState([]);
+    const [messages, setMessages] = useState([]);
+    let formData = new FormData();
+
 
     useEffect(() => {
         if (userData) {
             setAvatarUrl(getAvatarPath(userData['avatar']));
         }
     }, [userData])
+
+
+    const submitPhoto = (e) => {
+        e.preventDefault();
+        console.log(e.target.files[0]);
+        console.log(formData);
+
+        formData.append("avatar", e.target.files[0]);
+        api.post("/users/avatar/", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+        })
+        .then(resp => {console.log(resp);})
+        .catch(error => {console.log(error);})
+
+    }
+
 
     if (!loggedIn) {
         return (
@@ -40,15 +64,23 @@ export function ProfilePage({ userData, loggedIn }) {
 
                     <Divider />
 
-                    <Box display='flex' flexDirection='row' mt={5}>
+                    <Box display='flex' flexDirection='row' my={5}>
                         <Avatar src={avatarUrl ? avatarUrl : null} sx={{ width: '10vw', height: '10vw' }} />
-                        <Box display='flex' flexDirection='column' ml={5}>
+                        <Box display='flex' justifyContent='center' flexDirection='column' ml={5}>
                             <Typography variant="h5">Change avatar</Typography>
-                            <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
+                            <form style={{ marginTop: '2vh' }} encType="multipart/form-data">
+                            <Button component="label" variant="contained" startIcon={<CloudUploadIcon />} type="submit">
                                 Upload file
-                                <input type="file" hidden accept="image/png"></input>
+                                <input onChange={submitPhoto} type="file" hidden accept="image/png"></input>
                             </Button>
+                            </form>
                         </Box>
+                    </Box>
+
+                    <Box display='flex' flexDirection='column' gap={2}>
+                        <Typography variant="h4">First name: {userData['first_name']}</Typography>
+                        <Typography variant="h4">Last name: {userData['last_name']}</Typography>
+                        <Typography variant="h4">Email: {userData['email']}</Typography>
                     </Box>
                 </Box>
             )
