@@ -1,11 +1,14 @@
 import './Home.css';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { NavBar } from "../components/UpperNavBar";
 import SideBar from '../components/SideBar';
 
 
-export function DashboardPage({loggedIn}) {
+export function DashboardPage({userData, loggedIn}) {
+    console.log(userData);
+
     if (!loggedIn) {
         return (
             <>
@@ -19,8 +22,17 @@ export function DashboardPage({loggedIn}) {
             </>
         )
     } else {
+
+        const MainContent = () => (
+            <div>
+                <Typography variant='h3'>Welcome back, {userData ? userData.first_name : "User" }!</Typography>
+                <Button>Get user</Button>
+            </div>
+        )
+
         return (
-            <SideBar />
+            <SideBar userData={userData} mainContent={<MainContent />} />
+
             // <div className='flex section f-c'>
                 
             //     <Box sx={{ backgroundColor: "black" }}>

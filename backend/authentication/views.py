@@ -41,5 +41,19 @@ class CreateUserView(APIView):
         return Response({"errors": flatten_errors(user_ser.errors)}, status.HTTP_400_BAD_REQUEST)
                 
             
+class GetProfileView(APIView):
     
+    def get(self, request):
+        user = request.user
+        
+        profile = Profile.objects.get(user=user.pk)
+        profile_data = {'profile': {
+            "username": user.username,
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "avatar": profile.avatar.url
+            }}
+        
+        return Response(profile_data, status.HTTP_200_OK)
     

@@ -19,6 +19,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
+import { apiUrl } from './ApiClient';
 
 
 // Template from MUI docs
@@ -72,8 +73,19 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-export default function MiniDrawer() {
+
+export default function SideBar({ userData, mainContent }) {
   const [open, setOpen] = React.useState(false);
+  let userAvatarFile = "";
+  let avatarUrl = "";
+
+  if (userData) {
+    const filePath = userData["avatar"].split("/");
+    userAvatarFile = filePath[filePath.length - 1];
+    avatarUrl = apiUrl + '/media/avatars/' + userAvatarFile;
+  }
+
+
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -135,8 +147,8 @@ export default function MiniDrawer() {
         <Box display="flex" flexGrow={1} justifyContent={ open ? 'center' : 'center' } alignItems="flex-end" sx={{ mb: 3 }}>
             <ListItemButton sx={{ p: 1.5 }}>
                 <Box display="flex" justifyContent='center' alignItems='center' sx={{ pl: open ? '2vw' : 0 }}>
-                    <Avatar src="http://localhost:8000/media/avatars/default.png" sx={{ mr: open ? 2 : 'auto' }}></Avatar>
-                    <Typography sx={{ display: open ? 'block' : 'none' }}>Test User</Typography>
+                    <Avatar src={ userData ? avatarUrl : apiUrl + "/media/avatars/default.png" } sx={{ mr: open ? 2 : 'auto' }}></Avatar>
+                    <Typography sx={{ display: open ? 'block' : 'none' }}>{userData ? userData["username"] : 'Username'}</Typography>
                 </Box>
             </ListItemButton>
         </Box>
@@ -145,35 +157,8 @@ export default function MiniDrawer() {
       </Drawer>
 
       {/* PAGE CONTENT */}
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        {/* <DrawerHeader /> */}
-        <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-          tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
-          enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
-          imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus.
-          Convallis convallis tellus id interdum velit laoreet id donec ultrices.
-          Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-          adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra
-          nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum
-          leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis
-          feugiat vivamus at augue. At augue eget arcu dictum varius duis at
-          consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
-          sapien faucibus et molestie ac.
-        </Typography>
-        <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper
-          eget nulla facilisi etiam dignissim diam. Pulvinar elementum integer enim
-          neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra
-          tellus. Purus sit amet volutpat consequat mauris. Elementum eu facilisis
-          sed odio morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi
-          tincidunt ornare massa eget egestas purus viverra accumsan in. In hendrerit
-          gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-          et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis
-          tristique sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-          eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-          posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography>
+      <Box sx={{ flexGrow: 1, ml: '5vw', p: 5 }}>
+        { mainContent }
       </Box>
     </Box>
   );
