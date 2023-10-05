@@ -16,7 +16,7 @@ export function Home({loggedIn}) {
             <NavBar loggedIn={loggedIn} />
 
             <div id="firstSection" className="section flex f-c">
-                <Typography variant="h1">Welome to Kanbanio!</Typography>
+                <Typography variant="h1" sx={{ color: 'black' }}>Welome to Kanbanio!</Typography>
                 <ThemeProvider theme={blackWhiteTheme}>
                     <Link to="secondSection" spy={true} smooth={true} duration={800}>
                         <Button variant="contained" size="large" sx={{ mt: 5 }}>Get started</Button>
@@ -32,7 +32,7 @@ export function Home({loggedIn}) {
                     src={spinningBall}
                     style={{ height: '20vw', width: '20vw',  marginRight: '5vw' }}
                     />
-                    <Box display="flex" flexDirection="column" justifyContent="center">
+                    <Box display="flex" flexDirection="column" justifyContent="center" sx={{ color: 'black' }}>
                         <Typography variant="h2" sx={{ mb: 5 }}>Improve your productivity</Typography>
                         <Typography variant="h5" >
                             With our tool you always will be consentrating on important things

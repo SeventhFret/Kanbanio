@@ -1,43 +1,44 @@
 import Box from "@mui/material/Box";
-import "./SignUpForm.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { whiteBlackTheme } from "./Themes";
 import { Alert } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
 import { Button } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 import { api } from "./ApiClient";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
-export function SignUpForm() {  
+export function LoginForm() {  
     const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
     const [password, setPassword] = useState("");
-    const [messages, setMessages] = useState([]);
+    const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState([]);
+    const navigate = useNavigate();
+
 
     const submitUserData = (e) => {
+        setLoading(true);
         e.preventDefault();
         
-        api.post("/users/create/", {
-            "email": email,
-            "first_name": firstName,
-            "last_name": lastName,
+        api.post("/users/token/obtain/", {
             "username": username,
             "password": password
         })
         .then(resp => {
-            if (resp.status === 201) {
-                setMessages(resp.data['messages']); 
+            if (resp) {
                 setErrors([]);
+                setLoading(false);
+                localStorage.setItem("access", resp.data['access']);
+                localStorage.setItem("refresh", resp.data['refresh']);
+                navigate("/dashboard/");
             }
         })
         .catch(error => {
             if (error) {
-                setErrors(error.response.data['errors']);
-                setMessages([]);
+                setLoading(false);
+                setErrors(["Invalid username or password"]);
+            console.log(error);
             }
         })
     } 
@@ -49,40 +50,46 @@ export function SignUpForm() {
 
         if (id === "username") {
             setUsername(value);
-        } else if (id === "email") {
-            setEmail(value);
-        } else if (id === "firstName") {
-            setFirstName(value);
-        } else if (id === "lastName") {
-            setLastName(value);
         } else if (id === "password") {
             setPassword(value);
         }
     }
 
+
     return (
             <form onSubmit={submitUserData}>
+            { loading ? 
+            <Box display='flex' 
+                 justifyContent="center"
+                 alignItems="center" 
+                 flexDirection="column" 
+                 sx={{ p: 5, 
+                       borderRadius: '15px', 
+                       backgroundColor: 'black', 
+                       minWidth: "25vw", 
+                       height: '311px' }}>
+                <CircularProgress />
+            </Box>
+
+            :
+            
             <Box display='flex' flexDirection="column" sx={{ p: 5, borderRadius: '15px', backgroundColor: 'black', minWidth: "25vw", gap: '2vh' }}>
-                <h2 style={{ color: 'white' }}>Registration</h2>
+                <h2 style={{ color: 'white' }}>Login</h2>
                 <input className="text-input" id="username" type="text" onChange={changeData} placeholder="Username"></input>
-                <input className="text-input" id="firstName" type="text" onChange={changeData} placeholder="First name"></input>
-                <input className="text-input" id="lastName" type="text" onChange={changeData} placeholder="Last name"></input>
-                <input className="text-input" id="email" type="text" onChange={changeData} placeholder="Email"></input>
                 <input className="text-input" id="password" type="password" onChange={changeData} placeholder="Password"></input>
 
                 <ThemeProvider theme={whiteBlackTheme}>
-                    <Button variant="contained" type="submit">Create account</Button>
+                    <Button variant="contained" type="submit">Login</Button>
                 </ThemeProvider>
 
-                <p>Already have an account? <Link to="/login/" className="link">Login</Link></p>
+                <p>Don't have an account? <Link to="/register/" className="link">Create account</Link></p>
 
                 { errors ? 
                 errors.map((error, errInd) => (<Alert key={errInd} severity="error">{error}</Alert>))
                  : null }
 
-                { messages ? messages.map((message, mesInd) => (<Alert key={mesInd}>{message}</Alert>)) : null }
-
             </Box>
+            }
             </form>
     )
 }
