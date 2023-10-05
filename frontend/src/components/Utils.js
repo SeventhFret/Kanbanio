@@ -1,4 +1,5 @@
-import { api } from "./ApiClient";
+import { api, apiUrl } from "./ApiClient";
+
 
 
 export function getRefreshToken() {
@@ -14,3 +15,11 @@ export function getRefreshToken() {
     })
 }
 
+
+export function getAvatarPath(avatar) {
+    const filePath = avatar.split("/");
+    const userAvatarFile = filePath[filePath.length - 1];
+    const avatarUrl = apiUrl + '/media/avatars/' + userAvatarFile;
+
+    return avatarUrl
+}

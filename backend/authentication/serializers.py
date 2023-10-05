@@ -7,6 +7,8 @@ class ProfileSerializer(ModelSerializer):
     class Meta:
         model = Profile
         fields = ["user", "avatar"]
+        partial = True
+        
         
 class UserSerializer(ModelSerializer):
     class Meta:
@@ -22,3 +24,5 @@ class UserSerializer(ModelSerializer):
         
         instance.save()
         return instance
+        
+        

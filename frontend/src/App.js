@@ -5,6 +5,7 @@ import { Home } from './pages/Home';
 import { LoginPage } from './pages/Login';
 import { SignUpPage } from './pages/SignUp';
 import { DashboardPage } from './pages/Dashboard';
+import { ProfilePage } from './pages/Profile';
 import { api } from './components/ApiClient';
 import { getRefreshToken } from './components/Utils';
 
@@ -28,7 +29,7 @@ function App() {
           Authorization: "JWT " + accessToken
         }
       })
-      .then(res => {setUserData(res.data.profile);console.log(res);})
+      .then(res => {setUserData(res.data.profile)})
       .catch(error => {
         if (error.response.status === 401) {
           getRefreshToken();
@@ -36,7 +37,7 @@ function App() {
         }
       })
     }
-  }, [loggedIn, accessToken])
+  }, [loggedIn, accessToken]);
 
   return (
     <Routes>
@@ -44,6 +45,7 @@ function App() {
       <Route path="/login/" element={<LoginPage />} />
       <Route path="/register/" element={<SignUpPage />} />
       <Route path="/dashboard/" element={<DashboardPage userData={userData} loggedIn={loggedIn}/>} />
+      <Route path="/profile/" element={ <ProfilePage userData={userData} loggedIn={loggedIn} /> } />
     </Routes>
   );
 }

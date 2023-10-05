@@ -1,16 +1,14 @@
 import * as React from 'react';
+import "./SideBar.css";
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import Avatar from '@mui/material/Avatar';
-// import MuiAppBar from '@mui/material/AppBar';
-// import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-// import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
@@ -19,7 +17,10 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
+import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
+import { Link } from 'react-router-dom';
 import { apiUrl } from './ApiClient';
+import { getAvatarPath } from './Utils';
 
 
 // Template from MUI docs
@@ -75,16 +76,12 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 
 export default function SideBar({ userData, mainContent }) {
-  const [open, setOpen] = React.useState(false);
-  let userAvatarFile = "";
+  const [open, setOpen] = React.useState(true);
   let avatarUrl = "";
 
   if (userData) {
-    const filePath = userData["avatar"].split("/");
-    userAvatarFile = filePath[filePath.length - 1];
-    avatarUrl = apiUrl + '/media/avatars/' + userAvatarFile;
+    avatarUrl = getAvatarPath(userData["avatar"]);
   }
-
 
 
   const handleDrawerOpen = () => {
@@ -102,7 +99,7 @@ export default function SideBar({ userData, mainContent }) {
         { open ? 
             <DrawerHeader>
                 <Box alignItems="center" display="flex" flexGrow={1}>
-                    <Typography flexGrow={1} variant='h5'>Kanbanio</Typography>
+                    <Typography sx={{ pl: 2 }} flexGrow={1} variant='h5'>Kanbanio</Typography>
                     <IconButton onClick={handleDrawerClose}>
                         <ChevronLeftIcon />
                     </IconButton>
@@ -119,8 +116,9 @@ export default function SideBar({ userData, mainContent }) {
         <Divider />
 
         <List>
-          {['Todos', "Notes"].map((text, index) => (
+          {["Dashboard", 'Todos', "Notes"].map((text, index) => (
             <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+              <Link className='link' to={"/" + text.toLowerCase() + "/"}>
               <ListItemButton
                 sx={{
                   minHeight: 48,
@@ -135,22 +133,27 @@ export default function SideBar({ userData, mainContent }) {
                     justifyContent: 'center',
                   }}
                 >
-                  {index % 2 === 0 ? <TextSnippetIcon /> : <FormatListNumberedIcon />}
+                  { index === 0 ? <SpaceDashboardIcon /> : null }
+                  { index === 1 ?  <FormatListNumberedIcon /> : null}
+                  { index === 2 ? <TextSnippetIcon /> : null }
                 </ListItemIcon>
                 <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
+              </Link>
             </ListItem>
           ))}
 
         </List>
 
         <Box display="flex" flexGrow={1} justifyContent={ open ? 'center' : 'center' } alignItems="flex-end" sx={{ mb: 3 }}>
+          <Link to="/profile/" className='link'>
             <ListItemButton sx={{ p: 1.5 }}>
                 <Box display="flex" justifyContent='center' alignItems='center' sx={{ pl: open ? '2vw' : 0 }}>
                     <Avatar src={ userData ? avatarUrl : apiUrl + "/media/avatars/default.png" } sx={{ mr: open ? 2 : 'auto' }}></Avatar>
                     <Typography sx={{ display: open ? 'block' : 'none' }}>{userData ? userData["username"] : 'Username'}</Typography>
                 </Box>
             </ListItemButton>
+          </Link>
         </Box>
 
         <Divider />

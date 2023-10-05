@@ -1,5 +1,7 @@
+import os
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
+from rest_framework.generics import UpdateAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
@@ -56,4 +58,25 @@ class GetProfileView(APIView):
             }}
         
         return Response(profile_data, status.HTTP_200_OK)
+    
+    
+class UpdateAvatarView(APIView):
+
+    
+    def post(self, request):
+        profile = Profile.objects.get(user=request.user.id)
+        old_pic_path = profile.avatar.path
+        
+        ser = ProfileSerializer(instance=profile, data=request.data, partial=True)
+        
+        if ser.is_valid():
+            ser.save()
+            
+            if os.path.exists(old_pic_path):
+                os.remove(old_pic_path)
+        
+            return Response({"messages": ["Avatar successfully updated!"]}, status.HTTP_200_OK)
+        return Response("smth is wrong", status.HTTP_400_BAD_REQUEST)
+    
+
     
