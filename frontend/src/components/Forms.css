@@ -1,0 +1,19 @@
+.text-input {
+    border: 2px solid white;
+    border-radius: 10px;
+    /* width: 90%; */
+    background: none;
+    outline: none;
+    padding: 1vw 0.5vw;
+    color: white;
+    font-size: 1vw;
+}
+
+
+.link {
+    color: white;
+}
+
+.link:any-link {
+    color: white;
+}

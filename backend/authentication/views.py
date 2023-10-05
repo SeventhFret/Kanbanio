@@ -35,7 +35,8 @@ class CreateUserView(APIView):
             if profile_ser.is_valid():
                 profile_ser.save()
                 
-                return Response({"user": user_ser.data, "profile": profile_ser.data}, status.HTTP_201_CREATED)
+                
+                return Response({"messages": ["User created successfully!"]}, status.HTTP_201_CREATED)
         
         return Response({"errors": flatten_errors(user_ser.errors)}, status.HTTP_400_BAD_REQUEST)
                 

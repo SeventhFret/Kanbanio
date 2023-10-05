@@ -2,7 +2,7 @@ import "./Home.css";
 import { Typography, ThemeProvider, Box } from "@mui/material";
 import { NavBar } from "../components/UpperNavBar";
 import { Button } from "@mui/material";
-import { blackWhiteButtonTheme } from "../components/Themes";
+import { blackWhiteTheme } from "../components/Themes";
 import { Link } from 'react-scroll';
 import { Player } from "@lottiefiles/react-lottie-player";
 import spinningBall from "../lotties/spinningBall.json";
@@ -17,7 +17,7 @@ export function Home({loggedIn}) {
 
             <div id="firstSection" className="section flex f-c">
                 <Typography variant="h1">Welome to Kanbanio!</Typography>
-                <ThemeProvider theme={blackWhiteButtonTheme}>
+                <ThemeProvider theme={blackWhiteTheme}>
                     <Link to="secondSection" spy={true} smooth={true} duration={800}>
                         <Button variant="contained" size="large" sx={{ mt: 5 }}>Get started</Button>
                     </Link>

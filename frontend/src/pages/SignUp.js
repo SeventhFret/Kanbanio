@@ -1,7 +1,11 @@
+import { SignUpForm } from "../components/SignUpForm";
+import "./Home.css";
 
 
-export function SignUpForm() {
+export function SignUpPage() {
     return (
-        <h2>Registration</h2>
+        <div className="flex section">
+            <SignUpForm />
+        </div>
     )
 }

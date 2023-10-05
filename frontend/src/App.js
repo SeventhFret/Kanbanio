@@ -2,7 +2,7 @@ import './App.css';
 import { Routes, Route } from 'react-router-dom';
 import { Home } from './pages/Home';
 import { LoginForm } from './pages/Login';
-import { SignUpForm } from './pages/SignUp';
+import { SignUpPage } from './pages/SignUp';
 
 
 function App() {
@@ -18,7 +18,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Home loggedIn={loggedIn} />} />
       <Route path="/login/" element={<LoginForm loggedIn={loggedIn} />} />
-      <Route path="/register/" element={<SignUpForm loggedIn={loggedIn} />} />
+      <Route path="/register/" element={<SignUpPage loggedIn={loggedIn} />} />
 
     </Routes>
   );
