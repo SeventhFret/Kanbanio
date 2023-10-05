@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { whiteBlackTheme } from "./Themes";
 import { Alert } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";

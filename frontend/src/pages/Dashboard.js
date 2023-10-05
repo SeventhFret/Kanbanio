@@ -1,7 +1,8 @@
 import './Home.css';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { NavBar } from "../components/UpperNavBar"
+import { NavBar } from "../components/UpperNavBar";
+import SideBar from '../components/SideBar';
 
 
 export function DashboardPage({loggedIn}) {
@@ -19,11 +20,13 @@ export function DashboardPage({loggedIn}) {
         )
     } else {
         return (
-            <div className='flex section f-c'>
-                <Box sx={{ backgroundColor: "black" }}>
-                    <Typography variant='h2'>Welcome to dashboard</Typography>
-                </Box>
-            </div>
+            <SideBar />
+            // <div className='flex section f-c'>
+                
+            //     <Box sx={{ backgroundColor: "black" }}>
+            //         <Typography variant='h2'>Welcome to dashboard</Typography>
+            //     </Box>
+            // </div>
 
         )
     }

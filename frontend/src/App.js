@@ -15,7 +15,6 @@ function App() {
 
   if (accessToken && refreshToken) {
     loggedIn = true;
-    console.log(loggedIn);
   }
 
   return (
