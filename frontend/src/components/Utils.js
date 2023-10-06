@@ -23,3 +23,8 @@ export function getAvatarPath(avatar) {
 
     return avatarUrl
 }
+
+
+export function getUsersNotes() {
+    
+}

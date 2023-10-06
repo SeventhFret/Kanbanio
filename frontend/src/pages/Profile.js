@@ -1,15 +1,19 @@
+import "../components/SideBar.css";
 import SideBar from "../components/SideBar";
 import { Typography } from "@mui/material";
 import { Box } from "@mui/material";
 import Divider from "@mui/material/Divider";
 import Avatar from "@mui/material/Avatar";
 import Button from '@mui/material/Button';
+import Alert from "@mui/material/Alert";
+import { ThemeProvider } from "@emotion/react";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { getAvatarPath } from "../components/Utils";
-import { NavBar } from "../components/UpperNavBar";
+import { redButtonTheme } from "../components/Themes";
+import { UnauthorizedErrorPage } from "../components/UnauthorizedError";
 import { useEffect, useState } from "react";
 import { api } from "../components/ApiClient";
-import Alert from "@mui/material/Alert";
+import { Link } from "react-router-dom";
 
 
 export function ProfilePage({ userData, loggedIn }) {
@@ -44,17 +48,9 @@ export function ProfilePage({ userData, loggedIn }) {
 
     if (!loggedIn) {
         return (
-            <>
-            <NavBar loggedIn={false} />
-            <div className='flex section f-c'>
-                <Box sx={{ backgroundColor: "black", p: 5, borderRadius: '15px' }}>
-                    <Typography sx={{ color: 'red' }} variant='h2'>Error</Typography>
-                    <Typography sx={{ color: 'white' }} variant='h4'>You have to login to access this page</Typography>
-                </Box>
-            </div>
-            </>
+            <UnauthorizedErrorPage />
         )
-    } else {
+    }
         const MainContent = () => {
             return (                
                 <Box display='flex' flexDirection='column' flexGrow={1}>
@@ -80,16 +76,23 @@ export function ProfilePage({ userData, loggedIn }) {
                         </Box>
                     </Box>
 
-                    <Box display='flex' flexDirection='column' gap={2}>
+                    <Box display='flex' flexDirection='column' width="60%" gap={2}>
                         { userData ? 
                         <>
                         <Typography variant="h4">First name: {userData['first_name']}</Typography>
                         <Typography variant="h4">Last name: {userData['last_name']}</Typography>
                         <Typography variant="h4">Email: {userData['email']}</Typography>
                         </>
+
                         : null
                     }
                     </Box>
+                <Divider sx={{ my: 5 }} />
+                <ThemeProvider theme={redButtonTheme}>
+                    <Link to="/logout/" className="link">
+                        <Button variant="contained" sx={{ width: '20%' }}>Logout</Button>
+                    </Link>
+                </ThemeProvider>
                 </Box>
             )
         }
@@ -97,7 +100,5 @@ export function ProfilePage({ userData, loggedIn }) {
         return (
             <SideBar userData={userData} mainContent={< MainContent />} />
         )
-    }
-
 
 }

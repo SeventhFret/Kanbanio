@@ -6,6 +6,9 @@ import { LoginPage } from './pages/Login';
 import { SignUpPage } from './pages/SignUp';
 import { DashboardPage } from './pages/Dashboard';
 import { ProfilePage } from './pages/Profile';
+import { NotesPage } from './pages/NotesPage';
+import { TodosPage } from './pages/TodosPage';
+import { LogoutPage } from './pages/Logout';
 import { api } from './components/ApiClient';
 import { getRefreshToken } from './components/Utils';
 
@@ -31,10 +34,12 @@ function App() {
       })
       .then(res => {setUserData(res.data.profile)})
       .catch(error => {
-        if (error.response.status === 401) {
-          getRefreshToken();
-          console.log("refreshed");
-        }
+        if (error) {
+          if (error.response.status === 401) {
+            getRefreshToken();
+            console.log("refreshed");
+          }
+      }
       })
     }
   }, [loggedIn, accessToken]);
@@ -43,9 +48,12 @@ function App() {
     <Routes>
       <Route path="/" element={<Home loggedIn={loggedIn} />} />
       <Route path="/login/" element={<LoginPage />} />
+      <Route path="/logout/" element={<LogoutPage />} />
       <Route path="/register/" element={<SignUpPage />} />
       <Route path="/dashboard/" element={<DashboardPage userData={userData} loggedIn={loggedIn}/>} />
       <Route path="/profile/" element={ <ProfilePage userData={userData} loggedIn={loggedIn} /> } />
+      <Route path="/notes/" element={ <NotesPage userData={userData} loggedIn={loggedIn} /> } />
+      <Route path="/todos/" element={ <TodosPage userData={userData} loggedIn={loggedIn} /> } />
     </Routes>
   );
 }

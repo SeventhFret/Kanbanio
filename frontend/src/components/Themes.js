@@ -1,25 +1,6 @@
 import { createTheme } from "@mui/material";
-// import makeStyles from "@mui/styles";
 
 
-// export const textInputStyles = makeStyles({
-//     root: {
-//       "& label.Mui": {
-//         color: 'white'
-//       },
-//       // input label when focused
-//       "& label.Mui-focused": {
-//         color: "white"
-//       },
-
-//       // focused color for input with variant='outlined'
-//       "& .MuiOutlinedInput-root": {
-//         "&.Mui-focused fieldset": {
-//           borderColor: "white"
-//         }
-//       }
-//     }
-//   });
 
 export const blackWhiteTheme = createTheme({
     palette: {
@@ -44,4 +25,13 @@ export const whiteBlackTheme = createTheme({
         }
     },
 
+})
+
+export const redButtonTheme = createTheme({
+    palette: {
+        primary: {
+            main: "#d50000",
+            contrastText: "#fff"
+        }
+    }
 })
