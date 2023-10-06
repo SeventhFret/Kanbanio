@@ -20,7 +20,6 @@ import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
 import { Link } from 'react-router-dom';
 import { apiUrl } from './ApiClient';
-import { getAvatarPath } from './Utils';
 
 
 // Template from MUI docs

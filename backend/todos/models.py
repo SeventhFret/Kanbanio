@@ -9,3 +9,5 @@ class Todo(models.Model):
     folder = models.ForeignKey(Folder, on_delete=models.CASCADE)
     end_date = models.DateTimeField(null=True)
 
+    def __str__(self):
+        return f"Todo {self.title} in folder {self.folder.title}"

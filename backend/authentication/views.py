@@ -72,8 +72,9 @@ class UpdateAvatarView(APIView):
         if ser.is_valid():
             ser.save()
             
-            if os.path.exists(old_pic_path):
-                os.remove(old_pic_path)
+            if not old_pic_path.endswith("default.png"):
+                if os.path.exists(old_pic_path):
+                    os.remove(old_pic_path)
         
             return Response({"messages": ["Avatar successfully updated!"]}, status.HTTP_200_OK)
         return Response("smth is wrong", status.HTTP_400_BAD_REQUEST)

@@ -9,3 +9,7 @@ class Folder(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField()
     type = models.CharField(choices=TYPE_CHOISES)
+    
+    
+    def __str__(self):
+        return f"Folder {self.title} of type {self.type}"

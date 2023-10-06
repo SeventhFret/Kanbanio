@@ -67,11 +67,11 @@ export function ProfilePage({ userData, loggedIn }) {
                             <form style={{ marginTop: '2vh' }} encType="multipart/form-data">
                             <Button component="label" variant="contained" startIcon={<CloudUploadIcon />} type="submit">
                                 Upload file
-                                <input onChange={submitPhoto} type="file" hidden accept="image/png"></input>
+                                <input onChange={submitPhoto} type="file" hidden accept="image/png image/jpg"></input>
                             </Button>
                             </form>
                             { messages.map((message) => (
-                                <Alert>{message}</Alert>
+                                <Alert sx={{ mt: 2 }}>{message}</Alert>
                             )) }
                         </Box>
                     </Box>
