@@ -65,7 +65,6 @@ class UpdateAvatarView(APIView):
     
     def post(self, request):
         profile = Profile.objects.get(user=request.user.id)
-        print(request.data)
         old_pic_path = profile.avatar.path
         
         ser = ProfileSerializer(instance=profile, data=request.data, partial=True)

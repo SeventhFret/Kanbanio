@@ -31,7 +31,7 @@ export function LoginForm() {
                 setLoading(false);
                 localStorage.setItem("access", resp.data['access']);
                 localStorage.setItem("refresh", resp.data['refresh']);
-                navigate("/dashboard/");
+                navigate("/dashboard/", {loggedIn: true});
             }
         })
         .catch(error => {

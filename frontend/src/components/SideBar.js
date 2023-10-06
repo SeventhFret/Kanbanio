@@ -80,7 +80,7 @@ export default function SideBar({ userData, mainContent }) {
   let avatarUrl = "";
 
   if (userData) {
-    avatarUrl = getAvatarPath(userData["avatar"]);
+    avatarUrl = "http://127.0.0.1:8000" + userData["avatar"];
   }
 
 

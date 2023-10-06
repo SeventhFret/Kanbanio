@@ -6,10 +6,11 @@ import { Alert } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
 import { Button } from "@mui/material";
 import { api } from "./ApiClient";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 export function SignUpForm() {  
+    const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [firstName, setFirstName] = useState("");
@@ -32,6 +33,7 @@ export function SignUpForm() {
             if (resp.status === 201) {
                 setMessages(resp.data['messages']); 
                 setErrors([]);
+                navigate("/login/");
             }
         })
         .catch(error => {

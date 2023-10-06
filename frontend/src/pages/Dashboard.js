@@ -1,7 +1,7 @@
 import './Home.css';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { NavBar } from "../components/UpperNavBar";
+import { UnauthorizedErrorPage } from '../components/UnauthorizedError';
 import SideBar from '../components/SideBar';
 
 
@@ -10,15 +10,7 @@ export function DashboardPage({userData, loggedIn}) {
 
     if (!loggedIn) {
         return (
-            <>
-            <NavBar loggedIn={false} />
-            <div className='flex section f-c'>
-                <Box sx={{ backgroundColor: "black", p: 5, borderRadius: '15px' }}>
-                    <Typography sx={{ color: 'red' }} variant='h2'>Error</Typography>
-                    <Typography sx={{ color: 'white' }} variant='h4'>You have to login to access this page</Typography>
-                </Box>
-            </div>
-            </>
+            <UnauthorizedErrorPage />
         )
     } else {
 
