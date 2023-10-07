@@ -12,7 +12,8 @@ class TodoViewSet(ModelViewSet):
     def get_queryset(self):
         user = self.request.user
 
-        queryset = Todo.objects.filter(user=user)
+        queryset = Todo.objects.filter(user=user).order_by('id').reverse()
+        print(queryset)
         return queryset
     
     def create(self, request, *args, **kwargs):
