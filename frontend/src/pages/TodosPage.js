@@ -11,8 +11,6 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import List from "@mui/material/List";
 import AbcIcon from '@mui/icons-material/Abc';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-// import { getUsersTodos } from "../components/Utils";
-// import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { UnauthorizedErrorPage } from "../components/UnauthorizedError";
 import { KanbanColumn } from "../components/KanbanColumn";
 import { TodoDialog } from "../components/TodoDialog";
@@ -37,7 +35,7 @@ export function TodosPage({ userData, loggedIn }) {
         "Done": "rgba(41, 241, 41, 0.504)"
     }
 
-    const [currentTab, setCurrentTab] = useState(1);
+    const [currentTab, setCurrentTab] = useState(0);
     const [folders, setFolders] = useState([]);
     const [todos, setTodos] = useState([]);
     
@@ -73,7 +71,9 @@ export function TodosPage({ userData, loggedIn }) {
     
     const changeTab = (event, newValue) => {
         setCurrentTab(newValue);
+        localStorage.setItem('todos_view', newValue);
     }
+
     
     useState(() => {
         getUsersTodos();
@@ -95,13 +95,12 @@ export function TodosPage({ userData, loggedIn }) {
                 <div style={{ maxHeight: '80vh', overflow: 'auto' }}>
                 { folders ? folders.map((folder) => (
                     <Accordion
-                    // expanded={true}
+                    id={"folder" + folder.id}
                     key={folder.id}
                     sx={{ backgroundColor: columnColors[folder.title] }}>
                       <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls={"folder" + folder.id}
-                        id={"folder" + folder.id}
                       >
                         <Typography variant="h5">{folder.title}</Typography>
                       </AccordionSummary>
@@ -110,15 +109,13 @@ export function TodosPage({ userData, loggedIn }) {
                             <Typography display='flex' alignItems='center' sx={{ minWidth: '80%', fontWeight: 'bold' }}><AbcIcon size={'sm'} />Title</Typography>
                             <Typography display='flex' alignItems='center' sx={{ minWidth: '20%', fontWeight: 'bold' }}><CalendarMonthIcon />End date</Typography>
                         </Box>
+                        <List>
                         { todos ? todos.map((todo) => (
                             (todo.folder === folder.id) ? 
-                            // <Box display='flex' flexDirection='row' gap={10} p={2} sx={{ borderBottom: '1px solid black' }}>
-                            <List>
-                                    <TodoDialog key={todo.id} kanban={false} todoData={todo} folders={folders} />
-                            </List>
-                            // </Box>
+                                <TodoDialog key={todo.id} kanban={false} todoData={todo} folders={folders} />
                                 : null
-                        )) : null }
+                                )) : null }
+                        </List>
                         <Box display='flex' alignItems='center'>
                             <TodoDialog folders={folders} />
                         </Box>

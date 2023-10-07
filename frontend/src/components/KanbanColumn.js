@@ -16,7 +16,7 @@ export function KanbanColumn(props) {
               borderRadius: '5px', 
               backgroundColor: props.columnColor }}>
             <Typography variant="h6" pb="2vh" >{props.title}</Typography>
-            <Box display="flex" flexDirection="column" flexGrow={1} gap={1}>
+            <Box display="flex" flexDirection="column" gap={1}>
                 { props.todos ? props.todos.map((todo) => (
                     (todo.folder === props.folderId) ? 
                         <TodoDialog key={props.folderId} kanban={true} todoData={todo} folders={props.folders} />

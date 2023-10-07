@@ -12,6 +12,7 @@ export function LogoutPage({ loggedIn }) {
 
     useEffect(() => {
         naviagate("/");
+    // eslint-disable-next-line
     }, []);
 
 
