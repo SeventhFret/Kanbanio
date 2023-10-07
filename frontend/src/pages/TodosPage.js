@@ -51,13 +51,7 @@ export function TodosPage({ userData, loggedIn }) {
     }
 
     const getUsersFolders = (type) => {
-        let requestUrl = "/folder/";
-    
-        if (type === "N") {
-            requestUrl = requestUrl + "?type=N";
-        } else if (type === "T") {
-            requestUrl = requestUrl + "?type=T";
-        }
+        const requestUrl = "/folder/?type=T";
     
         api.get(requestUrl, {
             headers: {
@@ -77,7 +71,7 @@ export function TodosPage({ userData, loggedIn }) {
     
     useState(() => {
         getUsersTodos();
-        getUsersFolders('T');
+        getUsersFolders();
     }, [])
 
     const MainContent = () => (

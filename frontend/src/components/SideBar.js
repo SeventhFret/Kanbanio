@@ -74,7 +74,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 
-export default function SideBar({ userData, mainContent }) {
+export default function SideBar({ userData, mainContent, isNotesPage }) {
   const [open, setOpen] = React.useState(true);
   let avatarUrl = "";
 
@@ -109,7 +109,6 @@ export default function SideBar({ userData, mainContent }) {
         <DrawerHeader>
           <IconButton onClick={handleDrawerOpen}>
             <img src={logo} alt="Kanbanio logo" style={{ width: '2vw' }}></img>
-            {/* <ChevronRightIcon /> */}
           </IconButton>
         </DrawerHeader> 
         }
@@ -161,7 +160,7 @@ export default function SideBar({ userData, mainContent }) {
       </Drawer>
 
       {/* PAGE CONTENT */}
-      <Box sx={{ flexGrow: 1, ml: '5vw', p: 5 }}>
+      <Box sx={{ minWidth: '60%', flexGrow: 1, ml: isNotesPage ? 0 : '5vw', p: isNotesPage ? 0 : 5 }}>
         { mainContent }
       </Box>
     </Box>

@@ -8,4 +8,5 @@ class Note(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     folder = models.ForeignKey(Folder, on_delete=models.CASCADE)
     title = models.CharField()
+    text = models.TextField(default="")
     created = models.DateTimeField(default=datetime.now)

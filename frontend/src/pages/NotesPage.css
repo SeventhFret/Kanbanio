@@ -1,0 +1,17 @@
+.note-content {
+    display: flex;
+    flex-direction: column;
+    max-height: 80vh;
+}
+
+.note-text-area {
+    outline: none;
+    border: none;
+    font-size: 1vw;
+    flex-grow: 1;
+}
+
+.note-text-area:focus {
+    border: none;
+    
+}

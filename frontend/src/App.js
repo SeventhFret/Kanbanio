@@ -39,7 +39,9 @@ function App() {
           if (error.response.status === 401) {
             getRefreshToken();
             console.log("refreshed");
-            window.location.reload();
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000)
           }
       }
       })
