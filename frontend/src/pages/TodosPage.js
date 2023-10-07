@@ -64,8 +64,8 @@ export function TodosPage({ userData, loggedIn }) {
                 Authorization: "JWT " + localStorage.getItem("access")
             }
         })
-        .then(res => {setFolders(res.data)})
-        .catch(error => {setFolders(false)})
+        .then(res => {setFolders(res.data); console.log(res.data);})
+        .catch(error => {setFolders(false); console.log(error);})
     
     }
     

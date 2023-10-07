@@ -149,7 +149,7 @@ export function TodoDialog(props) {
             </Typography>
         </ListItemButton>
         <div>
-        <IconButton onClick={handleDeleteOpen}>
+        <IconButton onClick={handleDeleteOpen} type='submit'>
             <DeleteForeverIcon />
         </IconButton>
         <Dialog

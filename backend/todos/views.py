@@ -13,11 +13,20 @@ class TodoViewSet(ModelViewSet):
         user = self.request.user
 
         queryset = Todo.objects.filter(user=user).order_by('id').reverse()
-        print(queryset)
+        
         return queryset
     
+    def list(self, request, *args, **kwargs):
+        print(request.GET)
+        if 'latest' in request.GET: 
+            queryset = self.get_queryset()[:6]
+            ser = self.get_serializer(queryset, many=True)
+            
+            return Response(ser.data, status.HTTP_200_OK)
+        
+        return super().list(request, *args, **kwargs)
+    
     def create(self, request, *args, **kwargs):
-        print(request.data)
         request.data['user'] = request.user.id
         
         serializer = self.get_serializer(data=request.data)

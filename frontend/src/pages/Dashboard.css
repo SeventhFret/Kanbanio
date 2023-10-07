@@ -1,0 +1,9 @@
+.latest-todos-link { 
+    color: white;
+    /* width: 100%; */
+}
+
+.latest-todos-link:any-link {
+    color: white;
+    text-decoration: none;
+}
