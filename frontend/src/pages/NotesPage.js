@@ -2,9 +2,9 @@ import './NotesPage.css';
 import { useCallback, useEffect, useState } from 'react';
 import SideBar from "../components/SideBar";
 import NotesExplorer from "../components/NotesExplorer";
-import { UnauthorizedErrorPage } from "../components/UnauthorizedError";
+// import { UnauthorizedErrorPage } from "../components/UnauthorizedError";
 import { api } from '../components/ApiClient';
-import { Box, Divider, TextField, Typography } from '@mui/material';
+import { Box, Divider, Typography } from '@mui/material';
 import Markdown from 'react-markdown'
 import dayjs from 'dayjs';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
@@ -16,6 +16,9 @@ export function NotesPage({ userData, loggedIn }) {
     const [foldersState, setFoldersState] = useState({});
     const [notes, setNotes] = useState([]);
     const [noteFocused, setNoteFocused] = useState(false);
+    const [noteText, setNoteText] = useState("");
+    // const [noteTitle, setNoteTitle] = useState("");
+
 
     // if (!loggedIn) {
     //     return ( <UnauthorizedErrorPage /> )
@@ -69,14 +72,28 @@ export function NotesPage({ userData, loggedIn }) {
         setNoteFocused(true);
     }
 
+    const changeNoteText = (e) => {
+        e.preventDefault();
+        setNoteText(e.target.value);
+    }
+
     const handleSaveShortcut = useCallback((event) => {
         if (event.ctrlKey && event.key === 's'){
             if (noteFocused) {
                 console.log("Saving the note");
+                const requestUrl = "/notes/" + notes[selectedNote].id + "/";
+
+                api.patch(requestUrl, {"text": noteText}, {
+                    headers: {
+                        Authorization: "JWT " + localStorage.getItem("access")
+                    }
+                })
+                .then(res => {console.log(res.data);})
+                .catch(err => {console.log(err);})
                 setNoteFocused(false);
             }
         }
-      }, [noteFocused]);
+      }, [noteFocused, notes, noteText, selectedNote]);
     
 
     // console.log(selectedNote);
@@ -85,8 +102,9 @@ export function NotesPage({ userData, loggedIn }) {
         getFolders();
         getNotes();
 
-        window.addEventListener('keydown', handleSaveShortcut)
-    }, [handleSaveShortcut])
+        window.addEventListener('keydown', handleSaveShortcut);
+        // eslint-disable-next-line
+    }, [])
 
 
     const MainContent = () => (
@@ -108,7 +126,7 @@ export function NotesPage({ userData, loggedIn }) {
                 </Box>
                 <Box className='note-content'>
                     { noteFocused ?
-                    <TextareaAutosize value={notes[selectedNote].text} className='note-text-area' /> :
+                    <TextareaAutosize onChange={changeNoteText} value={notes[selectedNote].text} className='note-text-area' /> :
                     <div onClick={handleNoteFocus}>
                         <Markdown>{notes[selectedNote].text}</Markdown>
                     </div>
