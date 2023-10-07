@@ -15,6 +15,20 @@ class TodoViewSet(ModelViewSet):
         queryset = Todo.objects.filter(user=user)
         return queryset
     
+    def create(self, request, *args, **kwargs):
+        print(request.data)
+        request.data['user'] = request.user.id
+        
+        serializer = self.get_serializer(data=request.data)
+        
+        if serializer.is_valid():
+            serializer.save()
+            
+            return Response({"messages": ["Created successfully!"]}, status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status.HTTP_201_CREATED)
+        
+    
     def update(self, request, *args, **kwargs):
         kwargs['partial'] = True
         return super().update(request, *args, **kwargs)
@@ -25,7 +39,7 @@ class TodoViewSet(ModelViewSet):
         if not instance:
             return Response({"errors": ["Not found"]}, status.HTTP_404_NOT_FOUND)
         
-        serializer = self.get_serializer(instance, data=request.data['body'], partial=True)
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
         
         if serializer.is_valid():
             serializer.save()

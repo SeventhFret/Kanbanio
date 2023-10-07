@@ -35,9 +35,11 @@ function App() {
       .then(res => {setUserData(res.data.profile)})
       .catch(error => {
         if (error) {
+          console.clear();
           if (error.response.status === 401) {
             getRefreshToken();
             console.log("refreshed");
+            window.location.reload();
           }
       }
       })

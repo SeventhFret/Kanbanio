@@ -1,6 +1,7 @@
 import * as React from 'react';
 import ListItemButton from '@mui/material/ListItemButton';
 import AddIcon from '@mui/icons-material/Add';
+import AbcIcon from '@mui/icons-material/Abc';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -20,6 +21,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { api } from './ApiClient';
 import dayjs from 'dayjs';
+import CalendarMonth from '@mui/icons-material/CalendarMonth';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -28,7 +30,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 
 export function TodoDialog(props) {
-    const { todoData, folders } = props;
+    const { todoData, folders, kanban } = props;
     const [folder, setFolder] = React.useState();
     const [title, setTitle] = React.useState();
     const [endDate, setEndDate] = React.useState();
@@ -39,21 +41,35 @@ export function TodoDialog(props) {
         if (todoData) {
             const patchUrl = "/todo/" + todoData.id + "/";
 
-            api.patch(patchUrl, {
+            const updatedTodoData = {
+                "title": title,
+                "end_date": dayjs(endDate).format('YYYY-MM-DDTHH:mm:ssZ'),
+                "folder": folder
+            }
+
+            api.patch(patchUrl, updatedTodoData, {
                 headers: {
                     Authorization: 'JWT ' + localStorage.getItem("access")
                 },
-                body: {
-                    "title": title,
-                    "end_date": dayjs(endDate).format('YYYY-MM-DDTHH:mm:ssZ'),
-                    "folder": folder
-                }
             })
-            .then(res => {console.log(res);})
-            .catch(error => {console.log(error);})
+            .then(res => {handleClose(); window.location.reload();})
+            .catch(error => {handleClose();})
             
         } else {
-            // Create todo
+            const newTaskData = {
+                "title": title,
+                "folder": folder,
+                "end_date": dayjs(endDate).format('YYYY-MM-DDTHH:mm:ssZ')
+            }
+            api.post("/todo/", newTaskData, {
+                headers: {
+                    "Authorization": "JWT " + localStorage.getItem("access")
+                }
+            })
+            .then(res => {console.log(res);handleClose();})
+            .catch(error => {console.log(error);handleClose();})
+
+            // window.location.reload();
         }
     }
 
@@ -77,18 +93,25 @@ export function TodoDialog(props) {
     return (
         <>
         { todoData ? 
-        <ListItemButton onClick={handleClickOpen}>
-            <Typography key={todoData.id} sx={{ minWidth: '10vw' }}>
+        <ListItemButton sx={{ display: 'flex',
+         flexDirection: kanban ? 'column' : 'row', 
+         alignItems: kanban ? "flex-start" : 'initial',
+         border: kanban ? "1px solid black" : 'none',
+         borderRadius: kanban ? '10px' : 0,
+         flexGrow: 1 }}  onClick={handleClickOpen}>
+            <Typography display='flex' key={todoData.id} sx={{ minWidth: kanban ? null : '80%' , flexGrow: 1 }}>
+                {kanban ? <AbcIcon sx={{ mr: '0.5vw' }} /> : null}
                 {todoData.title}
             </Typography>
-            <Typography sx={{ minWidth: '10vw' }}>
-                {dayjs(new Date(todoData.end_date)).toString()}
+            <Typography display='flex' sx={{ minWidth: '20%', mt: kanban ? '1vh' : 0 }}>
+                {kanban ? <CalendarMonth sx={{ mr: '0.5vw' }} /> : null}
+                { dayjs(new Date(todoData.end_date)).format("DD.MM.YYYY HH:MM") }
             </Typography>
         </ListItemButton>
         : 
         <ListItemButton onClick={handleClickOpen}>
             <AddIcon />
-            Add todo
+            Add task
         </ListItemButton>
         }
         <div style={{ minWidth: '30vw' }}>
@@ -102,10 +125,10 @@ export function TodoDialog(props) {
             aria-describedby="alert-dialog-slide-description"
             sx={{ p: '5vw' }}
           >
-            <DialogTitle>{"Create todo"}</DialogTitle>
+            <DialogTitle>{todoData ? "Create task" : "Edit task"}</DialogTitle>
             <DialogContent>
             <DialogContentText mb={2} id="alert-dialog-slide-description">
-                Enter data to create todo
+                {todoData ? "Enter data to create task" : "Edit data to change task" }
             </DialogContentText>
             <Box display='flex' flexDirection='column' gap={2}>
                 <>
@@ -120,7 +143,7 @@ export function TodoDialog(props) {
                     onChange={handleFolderSelect}
                     >
                         { folders ? folders.map((folder) => (
-                            <MenuItem value={folder.id}>{folder.title}</MenuItem>
+                            <MenuItem key={folder.id} value={folder.id}>{folder.title}</MenuItem>
                         )) : null }
                     </Select>
                 </FormControl>
