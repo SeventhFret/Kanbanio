@@ -15,9 +15,11 @@ export function KanbanColumn(props) {
             <Typography variant="h6" pb="2vh" >{props.title}</Typography>
             <Box display="flex" flexDirection="column" gap={2}>
                 { props.todos ? props.todos.map((todo) => (
+                    (todo.folder === props.folderId) ? 
                     <Box key={todo.id} sx={{ backgroundColor: 'grey', p: 2, borderRadius: '5px' }}>
                         <Typography>{todo.title}</Typography>
                     </Box>
+                    : null
                 )) : null }
             </Box>
         </Box>

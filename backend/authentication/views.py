@@ -5,6 +5,7 @@ from rest_framework.generics import UpdateAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
+from folders.models import Folder
 from .serializers import UserSerializer, ProfileSerializer
 from .models import Profile
 
@@ -37,6 +38,9 @@ class CreateUserView(APIView):
             if profile_ser.is_valid():
                 profile_ser.save()
                 
+                Folder.objects.create(user=user, title="Todo", type="T")
+                Folder.objects.create(user=user, title="In progress", type="T")
+                Folder.objects.create(user=user, title="Done", type="T")
                 
                 return Response({"messages": ["User created successfully!"]}, status.HTTP_201_CREATED)
         
