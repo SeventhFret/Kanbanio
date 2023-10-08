@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { api, apiUrl } from "./ApiClient";
 
 
@@ -14,6 +14,8 @@ export function getRefreshToken() {
     .catch(error => {
         localStorage.clear();
     })
+
+
 }
 
 
@@ -26,19 +28,40 @@ export function getAvatarPath(avatar) {
 }
 
 
-export function getUsersNotes() {
-    let userNotes = [];
 
-    api.get("/notes/", {
-        headers: {
-            Authorization: "JWT " + localStorage.getItem("access")
-        }
-    })
-    .then(res => {userNotes = res.json()})
-    .catch(error => {userNotes = false})
+export const useApiNotesFolders = () => {
+    const [folders, setFolders] = useState([]);
 
+    useEffect(() => {
+        api.get("/folder/?type=N", {
+            headers: {
+                "Authorization": "JWT " + localStorage.getItem('access')
+            }
+        })
+        .then(res => {setFolders(res.data)})
+        .catch(error => {console.log(error);})
+    }, [])
 
-    return userNotes
+    return folders;
+
+  }
+
+export const useApiNotes = () => {
+    const [notes, setNotes] = useState([]);
+
+    useEffect(() => {
+        api.get("/notes/", {
+            headers: {
+                "Authorization": "JWT " + localStorage.getItem("access")
+            }
+        })
+        .then(res => {setNotes(res.data)})
+        .catch(error => {console.log(error);})
+
+    }, [])
+    
+    return notes
+
 }
 
 

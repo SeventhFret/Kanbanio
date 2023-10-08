@@ -94,6 +94,8 @@ export function TodoDialog(props) {
 
         handleDeleteClose();
 
+        
+
         setTimeout(function() {
             window.location.reload();
         }, 1000)

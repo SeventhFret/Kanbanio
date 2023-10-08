@@ -123,7 +123,13 @@ export function TodosPage({ userData, loggedIn }) {
             :
             <Box component='div' value={1} index={1} display="flex" gap={5} sx={{ height: "80vh", overflow: "auto" }}>
                 { folders ? folders.map((folder) => (
-                    <KanbanColumn columnColor={columnColors[folder.title]} key={folder.id} title={folder.title} todos={todos} folderId={folder.id} folders={folders} />
+                    <KanbanColumn 
+                     columnColor={columnColors[folder.title]}
+                     key={folder.id} 
+                     title={folder.title} 
+                     todos={todos} 
+                     folderId={folder.id} 
+                     folders={folders} />
                 )) : null}
             </Box>
             }

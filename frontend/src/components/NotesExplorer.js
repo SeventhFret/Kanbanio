@@ -16,11 +16,19 @@ import { Typography } from '@mui/material';
 
 
 export default function NotesExplorer(props) {
-  const { handleFolderOpen, changeSelectedNote, selectNote, folders, notes } = props;
-  const [foldersState, setFoldersState] = useState({});
-  const [selectedNote, setSelectedNote] = useState();
+  const getSavedFoldersState = () => {
+    const savedFoldersState = localStorage.getItem('foldersState'); 
 
+    if (savedFoldersState) {
+      return JSON.parse(savedFoldersState);
+    } 
+    return {}
+  }
   
+  const { changeSelectedNote, selectNote, folders, notes } = props;
+  const [foldersState, setFoldersState] = useState(getSavedFoldersState());
+  const [selectedNote, setSelectedNote] = useState(selectNote);
+
 
   const handleSelectedNote = (event, noteId) => {
     setSelectedNote(noteId);
@@ -29,28 +37,28 @@ export default function NotesExplorer(props) {
 
   const handleOpen = (event, folderId) => {
     const currentState = foldersState[folderId];
-        console.log('rereder');
     
-        if (currentState) {
-            setFoldersState({
-                ...foldersState,
-                [folderId]: !currentState
-            });
-        } else {
-            setFoldersState({
-                ...foldersState,
-                [folderId]: true
-            });
+
+    if (currentState !== undefined) {
+      setFoldersState({
+            ...foldersState,
+            [folderId]: !currentState
+        });
+        console.log(!currentState);
+      } else {
+        setFoldersState({
+          ...foldersState,
+          [folderId]: true
+        });
+      };
+      
+    }
     
-        };
-    // handleFolderOpen(event, folderId);
-  }
-
-
   useEffect(() => {
-    // setFoldersState(folderState);
-    setSelectedNote(selectNote);
-   }, [selectNote]);
+    localStorage.setItem("foldersState", JSON.stringify(foldersState));
+    console.log('State stored');
+  }, [foldersState])
+
 
   return (
     <List

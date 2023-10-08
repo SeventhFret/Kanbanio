@@ -7,14 +7,17 @@ import { api } from '../components/ApiClient';
 import { Box, Divider, Typography } from '@mui/material';
 import Markdown from 'react-markdown'
 import dayjs from 'dayjs';
+import { useApiNotes, useApiNotesFolders } from '../components/Utils';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 
 
 export function NotesPage({ userData, loggedIn }) {
     const [selectedNote, setSelectedNote] = useState();
-    const [folders, setFolders] = useState([]);
+    // const [folders, setFolders] = useState(useApiNotesFolders());
+    const folders = useApiNotesFolders();
+    const notes = useApiNotes();
     // const [foldersState, setFoldersState] = useState({});
-    const [notes, setNotes] = useState([]);
+    // const [notes, setNotes] = useState(useApiNotes());
     const [noteFocused, setNoteFocused] = useState(false);
     const [noteText, setNoteText] = useState("");
     // const [noteTitle, setNoteTitle] = useState("");
@@ -24,44 +27,6 @@ export function NotesPage({ userData, loggedIn }) {
     //     return ( <UnauthorizedErrorPage /> )
     // }
 
-    // const handleFolderOpen = (event, folderId) => {
-    //     const currentState = foldersState[folderId];
-    //     console.log('rereder');
-    
-    //     if (currentState) {
-    //         setFoldersState({
-    //             ...foldersState,
-    //             [folderId]: !currentState
-    //         });
-    //     } else {
-    //         setFoldersState({
-    //             ...foldersState,
-    //             [folderId]: true
-    //         });
-    
-    //     };
-    // };
-
-
-    const getFolders = () => {
-        api.get("/folder/?type=N", {
-            headers: {
-                "Authorization": "JWT " + localStorage.getItem('access')
-            }
-        })
-        .then(res => {setFolders(res.data)})
-        .catch(error => {console.log(error);})
-      }
-    
-      const getNotes = () => {
-        api.get("/notes/", {
-            headers: {
-                "Authorization": "JWT " + localStorage.getItem("access")
-            }
-        })
-        .then(res => {setNotes(res.data)})
-        .catch(error => {console.log(error);})
-      }
 
     const changeSelectedNote = (noteInd) => {
         setSelectedNote(noteInd);
@@ -77,34 +42,6 @@ export function NotesPage({ userData, loggedIn }) {
         setNoteText(e.target.value);
     }
 
-    // const handleSaveShortcut = useCallback((event) => {
-    //     if (event.ctrlKey && event.key === 's'){
-    //         if (noteFocused) {
-    //             console.log("Saving the note");
-    //             const requestUrl = "/notes/" + notes[selectedNote].id + "/";
-
-    //             api.patch(requestUrl, {"text": noteText}, {
-    //                 headers: {
-    //                     Authorization: "JWT " + localStorage.getItem("access")
-    //                 }
-    //             })
-    //             .then(res => {console.log(res.data);})
-    //             .catch(err => {console.log(err);})
-    //             setNoteFocused(false);
-    //         }
-    //     }
-    //   }, [noteFocused, notes, noteText, selectedNote]);
-    
-
-    // console.log(selectedNote);
-
-    useEffect(() => {
-        getFolders();
-        getNotes();
-
-        // window.addEventListener('keydown', handleSaveShortcut);
-        // eslint-disable-next-line
-    }, [])
 
 
     const MainContent = () => (
@@ -126,7 +63,11 @@ export function NotesPage({ userData, loggedIn }) {
                 </Box>
                 <Box className='note-content'>
                     { noteFocused ?
-                    <TextareaAutosize onChange={changeNoteText} value={notes[selectedNote].text} className='note-text-area' /> :
+                    <TextareaAutosize 
+                    onChange={changeNoteText} 
+                    defaultValue={notes[selectedNote].text} 
+                    className='note-text-area' /> 
+                    :
                     <div onClick={handleNoteFocus}>
                         <Markdown>{notes[selectedNote].text}</Markdown>
                     </div>
