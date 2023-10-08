@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, forwardRef } from 'react';
 import ListItemButton from '@mui/material/ListItemButton';
 import AddIcon from '@mui/icons-material/Add';
 import AbcIcon from '@mui/icons-material/Abc';
@@ -28,19 +28,19 @@ import { redButtonTheme } from './Themes';
 import dayjs from 'dayjs';
 
 
-const Transition = React.forwardRef(function Transition(props, ref) {
+const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
   });
 
 
 export function TodoDialog(props) {
     const { todoData, folders, kanban } = props;
-    const [folder, setFolder] = React.useState(folders ? folders[0].id : null);
-    const [title, setTitle] = React.useState();
-    const [endDate, setEndDate] = React.useState();
+    const [folder, setFolder] = useState(folders ? folders[0].id : null);
+    const [title, setTitle] = useState();
+    const [endDate, setEndDate] = useState();
 
-    const [openEdit, setOpenEdit] = React.useState(false);
-    const [openDeleteAlert, setOpenDeleteAlert] = React.useState(false);
+    const [openEdit, setOpenEdit] = useState(false);
+    const [openDeleteAlert, setOpenDeleteAlert] = useState(false);
 
     function submitTodo() {
         if (todoData) {

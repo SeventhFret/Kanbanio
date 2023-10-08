@@ -8,16 +8,18 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import FolderIcon from '@mui/icons-material/Folder';
 import DescriptionIcon from '@mui/icons-material/Description';
+import CreateIcon from '@mui/icons-material/Create';
 import Divider from '@mui/material/Divider';
-// import AddIcon from '@mui/icons-material/Add';
-import { Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import { IconButton, Toolbar, Typography } from '@mui/material';
+import { FolderFormDialog } from './FolderFormDialog';
 
 
 
 
 export default function NotesExplorer(props) {
   const getSavedFoldersState = () => {
-    const savedFoldersState = localStorage.getItem('foldersState'); 
+    const savedFoldersState = localStorage.getItem('foldersState');
 
     if (savedFoldersState) {
       return JSON.parse(savedFoldersState);
@@ -38,13 +40,11 @@ export default function NotesExplorer(props) {
   const handleOpen = (event, folderId) => {
     const currentState = foldersState[folderId];
     
-
     if (currentState !== undefined) {
       setFoldersState({
             ...foldersState,
             [folderId]: !currentState
         });
-        console.log(!currentState);
       } else {
         setFoldersState({
           ...foldersState,
@@ -53,34 +53,43 @@ export default function NotesExplorer(props) {
       };
       
     }
+
     
   useEffect(() => {
     localStorage.setItem("foldersState", JSON.stringify(foldersState));
-    console.log('State stored');
-  }, [foldersState])
+  }, [foldersState]);
 
 
   return (
     <List
       sx={{ width: '100%', 
       maxWidth: 360, 
-      height: '100vh', 
+      height: '100vh',
       bgcolor: 'background.paper', 
       margin: 0, 
       borderRight: '1px solid black',
-      position: 'static' 
+      position: 'static',
+      overflow: 'auto',
        }}
       component="nav"
       aria-labelledby="nested-list-subheader"
       subheader={
-          <Typography variant='h5' p={2}>Notes</Typography>
+        <div style={{ display: 'flex', flexDirection: 'row', flexGrow: 1, alignItems: 'center' }}>
+          <Typography variant='h5' p={2} flexGrow={1}>Notes</Typography>
+          <Toolbar>
+            <IconButton sx={{ height: '100%' }}>
+              <CreateIcon />
+            </IconButton>
+          </Toolbar>
+        </div>
       }
     >
       <Divider />
 
       { folders ? folders.map((folder) => (
-        <>
-      <ListItemButton id={folder.id} onClick={(event) => handleOpen(event, folder.id)}>
+      <div key={folder.id}>
+      <ListItemButton id={folder.id}
+      onClick={(event) => handleOpen(event, folder.id)}>
         <ListItemIcon>
           <FolderIcon />
         </ListItemIcon>
@@ -94,24 +103,26 @@ export default function NotesExplorer(props) {
           notes.map((note, index) => (
             (note.folder === folder.id) ?
             <ListItemButton
+            key={index}
             id={index}
             onClick={(event) => handleSelectedNote(event, index)}
             selected={(selectedNote === index) ? true : false}
-              sx={{ pl: 4 }}>
+            sx={{ pl: 4 }}>
             <ListItemIcon>
               <DescriptionIcon />
             </ListItemIcon>
             <ListItemText primary={note.title} />
           </ListItemButton>
           : null
-
         ))
           : null}
         </List>
       </Collapse>
-      </>
+      </div>
         )) : null
-      }
+      } 
+    <Divider sx={{ mt: '2vh' }} />
+    <FolderFormDialog />
     </List>
   );
 }

@@ -21,6 +21,7 @@ class NoteViewSet(ModelViewSet):
     
     def partial_update(self, request, *args, **kwargs):
         instance = self.get_object()
+        print(request.data)
         
         if not instance:
             return Response({"errors": ["Not found"]}, status.HTTP_404_NOT_FOUND)
@@ -33,3 +34,4 @@ class NoteViewSet(ModelViewSet):
             return Response({"messages": ["Updated successfully"]}, status.HTTP_200_OK)
         
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+    

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { api, apiUrl } from "./ApiClient";
 
 
-
 export function getRefreshToken() {
     api.post("/users/token/refresh/", {
         refresh: localStorage.getItem("refresh")
@@ -14,7 +13,7 @@ export function getRefreshToken() {
     .catch(error => {
         localStorage.clear();
     })
-
+    console.log('Obtained token');
 
 }
 
@@ -28,23 +27,6 @@ export function getAvatarPath(avatar) {
 }
 
 
-
-export const useApiNotesFolders = () => {
-    const [folders, setFolders] = useState([]);
-
-    useEffect(() => {
-        api.get("/folder/?type=N", {
-            headers: {
-                "Authorization": "JWT " + localStorage.getItem('access')
-            }
-        })
-        .then(res => {setFolders(res.data)})
-        .catch(error => {console.log(error);})
-    }, [])
-
-    return folders;
-
-  }
 
 export const useApiNotes = () => {
     const [notes, setNotes] = useState([]);
@@ -61,43 +43,74 @@ export const useApiNotes = () => {
     }, [])
     
     return notes
-
 }
 
 
-export function getUsersTodos() {
-    let userTodos;
+export function useApiTodos() {
+    const [userTodos, setUserTodos] = useState([]);
 
-    api.get("/todo/", {
-        headers: {
-            Authorization: "JWT " + localStorage.getItem("access")
-        }
-    })
-    .then(res => {userTodos = res.data})
-    .catch(error => {userTodos = false})
+    useEffect(() => {
+        api.get("/todo/", {
+            headers: {
+                Authorization: "JWT " + localStorage.getItem("access")
+            }
+        })
+        .then(res => {setUserTodos(res.data)})
+        .catch(error => {console.log(error)})
+    }, [])
 
     return userTodos
 }
 
-export function useUsersFolders({type}) {
-    let requestUrl = "/folder/";
-    const [folders, setFolders] = useState();
 
-    if (type === "N") {
-        requestUrl = requestUrl + "?type=N";
-    } else if (type === "T") {
-        requestUrl = requestUrl + "?type=T";
-    }
-
-    api.get(requestUrl, {
-        headers: {
-            Authorization: "JWT " + localStorage.getItem("access")
-        }
-    })
-    .then(res => {setFolders(res.data)})
-    .catch(error => {setFolders([])})
-
-
+export function useUsersFolders(type) {
+    const [folders, setFolders] = useState([]);
+    const requestUrl = "/folder/?type=" + type;
+    
+    useEffect(() => {
+        api.get(requestUrl, {
+            headers: {
+                Authorization: "JWT " + localStorage.getItem("access")
+            }
+        })
+        .then(res => {setFolders(res.data)})
+        .catch(error => {console.log(error);})
+    }, [requestUrl]);
+    
     return folders
+}
 
+
+export function useApiCreateFolder(folderData) {
+
+    return () => {
+        api.post("/folder/", folderData, {
+            headers: {
+                Authorization: "JWT " + localStorage.getItem('access')
+            }
+        })
+        .then(res => {console.log(res.data);})
+        .catch(error => {console.log(error);})
+    }
+    
+}
+
+export function useApiDeleteFolder(folderId) {
+    
+}
+
+
+export function useApiUpdateNote() {
+
+    return (noteData) => {
+        const patchUrl = "/notes/" + noteData.id + "/";
+        
+        api.patch(patchUrl, noteData, {
+            headers: {
+                Authorization: "JWT " + localStorage.getItem('access')
+            }
+        })
+        .then(res => {console.log(res.data);})
+        .catch(error => {console.log(error);})
+    }
 }
