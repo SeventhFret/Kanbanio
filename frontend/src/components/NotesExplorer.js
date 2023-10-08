@@ -16,7 +16,7 @@ import { Typography } from '@mui/material';
 
 
 export default function NotesExplorer(props) {
-  const { handleFolderOpen, changeSelectedNote, selectNote, folderState, folders, notes } = props;
+  const { handleFolderOpen, changeSelectedNote, selectNote, folders, notes } = props;
   const [foldersState, setFoldersState] = useState({});
   const [selectedNote, setSelectedNote] = useState();
 
@@ -28,15 +28,29 @@ export default function NotesExplorer(props) {
   }
 
   const handleOpen = (event, folderId) => {
-    setFoldersState()
-    handleFolderOpen(event, folderId);
+    const currentState = foldersState[folderId];
+        console.log('rereder');
+    
+        if (currentState) {
+            setFoldersState({
+                ...foldersState,
+                [folderId]: !currentState
+            });
+        } else {
+            setFoldersState({
+                ...foldersState,
+                [folderId]: true
+            });
+    
+        };
+    // handleFolderOpen(event, folderId);
   }
 
 
   useEffect(() => {
-    setFoldersState(folderState);
+    // setFoldersState(folderState);
     setSelectedNote(selectNote);
-   }, [folderState, selectNote]);
+   }, [selectNote]);
 
   return (
     <List
@@ -63,7 +77,7 @@ export default function NotesExplorer(props) {
           <FolderIcon />
         </ListItemIcon>
         <ListItemText primary={folder.title} />
-        {foldersState[folder.id] ? <ExpandLess /> : <ExpandMore />}
+        { foldersState[folder.id] ? <ExpandLess /> : <ExpandMore /> }
       </ListItemButton>
 
       <Collapse in={foldersState[folder.id]} timeout="auto" unmountOnExit>

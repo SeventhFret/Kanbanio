@@ -13,7 +13,7 @@ import TextareaAutosize from '@mui/material/TextareaAutosize';
 export function NotesPage({ userData, loggedIn }) {
     const [selectedNote, setSelectedNote] = useState();
     const [folders, setFolders] = useState([]);
-    const [foldersState, setFoldersState] = useState({});
+    // const [foldersState, setFoldersState] = useState({});
     const [notes, setNotes] = useState([]);
     const [noteFocused, setNoteFocused] = useState(false);
     const [noteText, setNoteText] = useState("");
@@ -24,23 +24,23 @@ export function NotesPage({ userData, loggedIn }) {
     //     return ( <UnauthorizedErrorPage /> )
     // }
 
-    const handleFolderOpen = (event, folderId) => {
-        const currentState = foldersState[folderId];
-        console.log('rereder');
+    // const handleFolderOpen = (event, folderId) => {
+    //     const currentState = foldersState[folderId];
+    //     console.log('rereder');
     
-        if (currentState) {
-            setFoldersState({
-                ...foldersState,
-                [folderId]: !currentState
-            });
-        } else {
-            setFoldersState({
-                ...foldersState,
-                [folderId]: true
-            });
+    //     if (currentState) {
+    //         setFoldersState({
+    //             ...foldersState,
+    //             [folderId]: !currentState
+    //         });
+    //     } else {
+    //         setFoldersState({
+    //             ...foldersState,
+    //             [folderId]: true
+    //         });
     
-        };
-    };
+    //     };
+    // };
 
 
     const getFolders = () => {
@@ -77,23 +77,23 @@ export function NotesPage({ userData, loggedIn }) {
         setNoteText(e.target.value);
     }
 
-    const handleSaveShortcut = useCallback((event) => {
-        if (event.ctrlKey && event.key === 's'){
-            if (noteFocused) {
-                console.log("Saving the note");
-                const requestUrl = "/notes/" + notes[selectedNote].id + "/";
+    // const handleSaveShortcut = useCallback((event) => {
+    //     if (event.ctrlKey && event.key === 's'){
+    //         if (noteFocused) {
+    //             console.log("Saving the note");
+    //             const requestUrl = "/notes/" + notes[selectedNote].id + "/";
 
-                api.patch(requestUrl, {"text": noteText}, {
-                    headers: {
-                        Authorization: "JWT " + localStorage.getItem("access")
-                    }
-                })
-                .then(res => {console.log(res.data);})
-                .catch(err => {console.log(err);})
-                setNoteFocused(false);
-            }
-        }
-      }, [noteFocused, notes, noteText, selectedNote]);
+    //             api.patch(requestUrl, {"text": noteText}, {
+    //                 headers: {
+    //                     Authorization: "JWT " + localStorage.getItem("access")
+    //                 }
+    //             })
+    //             .then(res => {console.log(res.data);})
+    //             .catch(err => {console.log(err);})
+    //             setNoteFocused(false);
+    //         }
+    //     }
+    //   }, [noteFocused, notes, noteText, selectedNote]);
     
 
     // console.log(selectedNote);
@@ -102,7 +102,7 @@ export function NotesPage({ userData, loggedIn }) {
         getFolders();
         getNotes();
 
-        window.addEventListener('keydown', handleSaveShortcut);
+        // window.addEventListener('keydown', handleSaveShortcut);
         // eslint-disable-next-line
     }, [])
 
@@ -110,9 +110,9 @@ export function NotesPage({ userData, loggedIn }) {
     const MainContent = () => (
         <div style={{ display: 'flex', flexDirection: 'row' }}>
             <NotesExplorer 
-            handleFolderOpen={handleFolderOpen} 
+            // handleFolderOpen={handleFolderOpen} 
             changeSelectedNote={changeSelectedNote} 
-            folderState={foldersState}
+            // folderState={foldersState}
             selectNote={selectedNote}
             folders={folders}
             notes={notes} />
@@ -140,6 +140,6 @@ export function NotesPage({ userData, loggedIn }) {
     )
 
     return (
-        <SideBar mainContent={<MainContent />} isNotesPage={true} userData={userData} />
+        <SideBar selected={'Notes'} mainContent={<MainContent />} isNotesPage={true} userData={userData} />
     )
 }

@@ -98,7 +98,7 @@ export function ProfilePage({ userData, loggedIn }) {
         }
 
         return (
-            <SideBar userData={userData} mainContent={< MainContent />} />
+            <SideBar selected={'Profile'} userData={userData} mainContent={< MainContent />} />
         )
 
 }

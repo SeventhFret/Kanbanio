@@ -56,6 +56,6 @@ export function DashboardPage({userData, loggedIn}) {
     )
 
     return (
-        <SideBar userData={userData} mainContent={<MainContent />} />
+        <SideBar selected={'Dashboard'} userData={userData} mainContent={<MainContent />} />
     )
     }

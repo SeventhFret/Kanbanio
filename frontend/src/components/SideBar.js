@@ -74,7 +74,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 
-export default function SideBar({ userData, mainContent, isNotesPage }) {
+export default function SideBar({ userData, mainContent, isNotesPage, selected }) {
   const [open, setOpen] = React.useState(true);
   let avatarUrl = "";
 
@@ -120,6 +120,7 @@ export default function SideBar({ userData, mainContent, isNotesPage }) {
             <ListItem key={text} disablePadding sx={{ display: 'block' }}>
               <Link className='link' to={"/" + text.toLowerCase() + "/"}>
               <ListItemButton
+                selected={selected ? selected === text : false}
                 sx={{
                   minHeight: 48,
                   justifyContent: open ? 'initial' : 'center',
@@ -147,7 +148,7 @@ export default function SideBar({ userData, mainContent, isNotesPage }) {
 
         <Box display="flex" flexGrow={1} justifyContent={ open ? 'center' : 'center' } alignItems="flex-end" sx={{ mb: 3 }}>
           <Link to="/profile/" className='link'>
-            <ListItemButton sx={{ p: 1.5 }}>
+            <ListItemButton selected={selected ? selected === 'Profile' : false} sx={{ p: 1.5 }}>
                 <Box display="flex" justifyContent='center' alignItems='center' sx={{ pl: open ? '2vw' : 0 }}>
                     <Avatar src={ userData ? avatarUrl : apiUrl + "/media/avatars/default.png" } sx={{ mr: open ? 2 : 'auto' }}></Avatar>
                     <Typography sx={{ display: open ? 'block' : 'none' }}>{userData ? userData["username"] : 'Username'}</Typography>

@@ -1,5 +1,5 @@
 import "./TodosPage.css";
-import * as React from 'react';
+import { useState, useEffect } from "react";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Box from "@mui/material/Box";
@@ -14,7 +14,6 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { UnauthorizedErrorPage } from "../components/UnauthorizedError";
 import { KanbanColumn } from "../components/KanbanColumn";
 import { TodoDialog } from "../components/TodoDialog";
-import { useState } from "react";
 import { api } from "../components/ApiClient";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Typography } from "@mui/material";
@@ -69,7 +68,7 @@ export function TodosPage({ userData, loggedIn }) {
     }
 
     
-    useState(() => {
+    useEffect(() => {
         getUsersTodos();
         getUsersFolders();
     }, [])
@@ -132,7 +131,7 @@ export function TodosPage({ userData, loggedIn }) {
     )
     
     return (
-        <SideBar mainContent={<MainContent />} userData={userData} />
+        <SideBar selected={"Todos"} mainContent={<MainContent />} userData={userData} />
     )
     
 
