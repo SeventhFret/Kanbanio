@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import SideBar from "../components/SideBar";
 import NotesExplorer from "../components/NotesExplorer";
 import { UnauthorizedErrorPage } from "../components/UnauthorizedError";
@@ -10,9 +10,9 @@ import { useApiNotes, useUsersFolders } from '../components/Utils';
 export function NotesPage({ userData, loggedIn }) {
     const [selectedNote, setSelectedNote] = useState();
     const [noteChanged, setNoteChanged] = useState(false);
-    const folders = useUsersFolders("N");
-    const notes = useApiNotes();
-
+    const [folderChanged, setFolderChanged] = useState(false);
+    const folders = useUsersFolders("N", folderChanged);
+    const notes = useApiNotes(noteChanged);
 
 
     if (!loggedIn) {
@@ -23,12 +23,17 @@ export function NotesPage({ userData, loggedIn }) {
         setSelectedNote(noteInd);
     }
 
-    const handleNoteChanged = () => {
-        notes.filter((note) => {return note.id !== selectedNote})
+    const handleNoteChanged = (action) => {
         setNoteChanged(true);
-        setSelectedNote(null);
+        if (action === 'deleted') {
+            // notes.filter((note) => {return note.id !== selectedNote})
+            setSelectedNote(null);
+        } 
     }
 
+    const handleFolderChanged = () => {
+        setFolderChanged(!folderChanged);
+    }
 
     const MainContent = () => (
         <div style={{ display: 'flex', flexDirection: 'row', position: "sticky", maxHeight: '95vh' }}>
@@ -36,6 +41,7 @@ export function NotesPage({ userData, loggedIn }) {
             changeSelectedNote={changeSelectedNote} 
             selectNote={selectedNote}
             folders={folders}
+            handleFolderChanged={handleFolderChanged}
             notes={notes} />
 
         { ((selectedNote || selectedNote === 0) && notes) ?
@@ -48,6 +54,10 @@ export function NotesPage({ userData, loggedIn }) {
     )
 
     return (
-        <SideBar selected={'Notes'} mainContent={<MainContent />} isNotesPage={true} userData={userData} />
+        <SideBar 
+         selected={'Notes'}
+         mainContent={<MainContent />} 
+         isNotesPage={true} 
+         userData={userData} />
     )
 }

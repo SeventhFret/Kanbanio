@@ -1,3 +1,4 @@
+import './Note.css';
 import { useState, useEffect } from 'react';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -8,14 +9,15 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import FolderIcon from '@mui/icons-material/Folder';
 import DescriptionIcon from '@mui/icons-material/Description';
-import CreateIcon from '@mui/icons-material/Create';
+import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import Divider from '@mui/material/Divider';
-// import Box from '@mui/material/Box';
+import ListItem from '@mui/material/ListItem';
+import Box from '@mui/material/Box';
 import { IconButton, Toolbar, Typography } from '@mui/material';
 import { FolderFormDialog } from './FolderFormDialog';
 import { NoteFormDialog } from './NoteFormDialog';
-
-
+import { FolderOptions } from './FolderOptions';
+import { apiUpdateFolder } from './Utils';
 
 
 export default function NotesExplorer(props) {
@@ -28,10 +30,12 @@ export default function NotesExplorer(props) {
     return {}
   }
   
-  const { changeSelectedNote, selectNote, folders, notes } = props;
+  const { changeSelectedNote, handleFolderChanged, selectNote, folders, notes } = props;
   const [foldersState, setFoldersState] = useState(getSavedFoldersState());
   const [selectedNote, setSelectedNote] = useState(selectNote);
   const [createNoteClicked, setCreateNoteClicked] = useState(false);
+  const [folderEdit, setFolderEdit] = useState();
+  const [newFolderTitle, setNewFolderTitle] = useState("");
 
 
   const handleSelectedNote = (event, noteId) => {
@@ -56,8 +60,20 @@ export default function NotesExplorer(props) {
       
     }
 
+    const submitFolderChanged = () => {
+      const filterEditedFolder = folders.filter((folder) => {return folder.id === folderEdit});
+      const updatedFolderData = filterEditedFolder[0];
+      
+      updatedFolderData.title = newFolderTitle;
+      apiUpdateFolder(updatedFolderData);
+    }
+
     const handleCreateNoteClicked = () => {
       setCreateNoteClicked(!createNoteClicked);
+    }
+
+    const handleFolderEdit = (folderId) => {
+      setFolderEdit(folderId);
     }
 
     
@@ -67,27 +83,23 @@ export default function NotesExplorer(props) {
 
 
   return (
-    <List
-      sx={{ width: '100%', 
-      maxWidth: 360, 
-      height: '100vh',
-      bgcolor: 'background.paper', 
-      margin: 0, 
+    <Box 
+    maxWidth={360} 
+    height='100vh' 
+    display='flex' 
+    flexDirection='column'
+    sx={{
       borderRight: '1px solid black',
-      position: 'static',
-      overflow: 'auto',
-       }}
-      component="nav"
-      aria-labelledby="nested-list-subheader"
-      subheader={
-        <div style={{ display: 'flex', flexDirection: 'row', flexGrow: 1, alignItems: 'center' }}>
+    }}
+    >
+      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
           <Typography variant='h5' p={2} flexGrow={1}>Notes</Typography>
           <Toolbar>
             <IconButton
             title='Create note'
             onClick={handleCreateNoteClicked}
             sx={{ height: '100%' }}>
-              <CreateIcon />
+              <NoteAddIcon />
             </IconButton>
           </Toolbar>
             { createNoteClicked ? 
@@ -96,20 +108,51 @@ export default function NotesExplorer(props) {
             handleCreateNoteClicked={handleCreateNoteClicked} />
             : null }
         </div>
-      }
+        <Divider />
+    <List
+      sx={{ width: '100%', 
+      maxWidth: 360, 
+      maxHeight: '95vh',
+      bgcolor: 'background.paper', 
+      margin: 0,
+      position: 'static',
+      overflow: 'auto',
+      flexGrow: 1
+       }}
+      component="nav"
+      aria-labelledby="nested-list-subheader"
     >
-      <Divider />
 
       { folders ? folders.map((folder) => (
-      <div key={folder.id}>
+      <Box key={folder.id}>
+      <ListItem sx={{ p: 0 }}
+      secondaryAction={
+        <FolderOptions 
+        handleFolderChanged={handleFolderChanged} 
+        folderId={folder.id} 
+        handleFolderEdit={handleFolderEdit} />
+      }>
       <ListItemButton id={folder.id}
       onClick={(event) => handleOpen(event, folder.id)}>
         <ListItemIcon>
           <FolderIcon />
         </ListItemIcon>
-        <ListItemText primary={folder.title} />
+        { (folderEdit && folderEdit === folder.id) ? 
+        <>
+        <form onSubmit={submitFolderChanged}>
+          <input type="text"
+          autoFocus
+          className='note-text-area' 
+          value={newFolderTitle}
+          placeholder={folder.title}
+          onChange={(e) => {setNewFolderTitle(e.target.value)}}></input>
+        </form>
+        </>
+         : <ListItemText primary={folder.title} />}
         { foldersState[folder.id] ? <ExpandLess /> : <ExpandMore /> }
       </ListItemButton>
+      
+      </ListItem>
 
       <Collapse in={foldersState[folder.id]} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
@@ -132,11 +175,13 @@ export default function NotesExplorer(props) {
           : null}
         </List>
       </Collapse>
-      </div>
+      
+      </Box>
         )) : null
       } 
-    <Divider sx={{ mt: '2vh' }} />
-    <FolderFormDialog />
     </List>
+    <Divider />
+    <FolderFormDialog handleFolderChange={handleFolderChanged} />
+    </Box>
   );
 }

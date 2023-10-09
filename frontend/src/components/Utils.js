@@ -28,7 +28,7 @@ export function getAvatarPath(avatar) {
 
 
 
-export const useApiNotes = () => {
+export const useApiNotes = (noteChanged) => {
     const [notes, setNotes] = useState([]);
 
     useEffect(() => {
@@ -40,7 +40,7 @@ export const useApiNotes = () => {
         .then(res => {setNotes(res.data)})
         .catch(error => {console.log(error);})
 
-    }, [])
+    }, [noteChanged])
 
         return notes
     }
@@ -64,7 +64,7 @@ export function useApiTodos() {
 }
 
 
-export function useUsersFolders(type) {
+export function useUsersFolders(type, folderChanged) {
     const [folders, setFolders] = useState([]);
     const requestUrl = "/folder/?type=" + type;
     
@@ -76,7 +76,7 @@ export function useUsersFolders(type) {
         })
         .then(res => {setFolders(res.data)})
         .catch(error => {console.log(error);})
-    }, [requestUrl]);
+    }, [requestUrl, folderChanged]);
     
     return folders
 }
@@ -125,6 +125,30 @@ export function apiUpdateNote(noteData) {
 
 export function apiCreateNote(noteData) {
     api.post("/notes/", noteData, {
+        headers: {
+            Authorization: "JWT " + localStorage.getItem('access')
+        }
+    })
+    .then(res => {console.log(res.data);})
+    .catch(error => {console.log(error);})
+}
+
+export function apiUpdateFolder(folderData) {
+    const updateUrl = "/folder/" + folderData.id + "/"
+    
+    api.patch(updateUrl, folderData, {
+        headers: {
+            Authorization: "JWT " + localStorage.getItem('access')
+        }
+    })
+    .then(res => {console.log(res.data);})
+    .catch(error => {console.log(error);})
+}
+
+export function apiDeleteFolder(folderId) {
+    const deleteUrl = "/folder/" + folderId + "/"
+    
+    api.delete(deleteUrl, {
         headers: {
             Authorization: "JWT " + localStorage.getItem('access')
         }

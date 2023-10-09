@@ -39,7 +39,7 @@ export function Note(props) {
     
     const handleDeleteNote = () => {
         apiDeleteNote(note.id);
-        handleNoteChanged();
+        handleNoteChanged('deleted');
     }
 
 
@@ -49,8 +49,9 @@ export function Note(props) {
         <div style={{ padding: '5vw', minWidth: '70%', maxHeight: '100vh' }}>
             <Box position='static'>
                 <Typography variant='h4' sx={{ mb: '1vh' }}>{note.title}</Typography>
-                <Typography sx={{ mb: '1vh' }}>Created: {dayjs(new Date(note.created)).format("MM-DD-YYYY HH:MM")}</Typography>
-                <Toolbar sx={{ ml: -1 }}>
+                <Typography variant="body2" sx={{ mb: '1vh' }}>Created: {dayjs(new Date(note.created)).format("MM-DD-YYYY HH:MM")}</Typography>
+                <Divider />
+                <Toolbar sx={{ ml: -1, maxHeight: '1vh' }}>
                     <Typography>Actions</Typography>
 
                     <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
@@ -73,7 +74,7 @@ export function Note(props) {
                         <DeleteIcon />
                     </IconButton>
                 </Toolbar>
-                <Divider sx={{ mb: '5vh' }} />
+                <Divider sx={{ mb: '2vh' }} />
             </Box>
             <Box 
              className='note-content' 
@@ -86,16 +87,9 @@ export function Note(props) {
                 value={noteText}
                 onChange={e => setNoteText(e.target.value)}
                 ></TextareaAutosize>
-                // <TextareaAutosize 
-                // onChange={changeNoteText} 
-                // defaultValue={notes[selectedNote].text} 
-                // className='note-text-area' />
                 :
-                <div 
-                 onClick={handleNoteFocus} 
-                //  style={{ display: 'flex', flexGrow: 1, backgroundColor: 'red' }}
-                >
-                    <Markdown style={{ display: 'flex', flexDirection: 'column' }}>{noteText}</Markdown>
+                <div onClick={handleNoteFocus}>
+                    <Markdown style={{ display: 'flex', flexDirection: 'column', paddingTop: 0 }}>{noteText}</Markdown>
                 </div>
                     }
                 {/* <Typography variant='subtitle'>{notes[selectedNote].text}</Typography> */}

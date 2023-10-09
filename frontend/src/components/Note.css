@@ -9,7 +9,8 @@
     outline: none;
     border: none;
     font-size: 1vw;
-    flex-grow: 1;
+    background: none;
+    /* flex-grow: 1; */
 }
 
 .note-text-area:focus {

@@ -24,7 +24,8 @@ const Transition = forwardRef(function Transition(props, ref) {
 
 
 export function FolderFormDialog(props) {
-    const [title, setTitle] = useState();
+    const { handleFolderChange, folderTitle } = props;
+    const [title, setTitle] = useState(folderTitle ? folderTitle : null);
     const submitFolderCreate = useApiCreateFolder({"title": title, "type": "N"});
 
     const [openEdit, setOpenEdit] = useState(false);
@@ -47,8 +48,8 @@ export function FolderFormDialog(props) {
 
 
     return (
-        <>
-        <ListItemButton onClick={handleEditOpen}>
+        <div>
+        <ListItemButton sx={{ py: 2 }} onClick={handleEditOpen}>
           <ThemeProvider theme={redButtonTheme}>
             <ListItemIcon>
                 <CreateNewFolderIcon />
@@ -74,16 +75,22 @@ export function FolderFormDialog(props) {
                 Enter data to create folder
             </DialogContentText>
             <Box display='flex' flexDirection='column' gap={2}>
-                <TextField onChange={handleTitleChange} label="Title"></TextField>
+                <TextField autoFocus={true} onChange={handleTitleChange} label="Title"></TextField>
             </Box>
 
             </DialogContent>
             <DialogActions sx={{ mb: '1vh', mr: '1vw' }}>
               <Button variant='filled' onClick={handleEditClose}>Cancel</Button>
-              <Button variant='contained' onClick={() => {submitFolderCreate({"title": title, "type": "N"}); handleEditClose();}}>Save</Button>
+              <Button 
+              variant='contained' 
+              onClick={() => {
+                submitFolderCreate({"title": title, "type": "N"}); 
+                handleFolderChange(); 
+                handleEditClose();
+                }}>Save</Button>
             </DialogActions>
           </Dialog>
         </div>
-        </>
+        </div>
       );
 }
