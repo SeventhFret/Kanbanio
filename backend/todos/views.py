@@ -17,7 +17,6 @@ class TodoViewSet(ModelViewSet):
         return queryset
     
     def list(self, request, *args, **kwargs):
-        print(request.GET)
         if 'latest' in request.GET: 
             queryset = self.get_queryset()[:6]
             ser = self.get_serializer(queryset, many=True)

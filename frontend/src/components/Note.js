@@ -1,49 +1,45 @@
 import "./Note.css";
-import { useEffect, useState, useCallback } from "react";
+import { useState } from "react";
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
+import Toolbar from "@mui/material/Toolbar";
 import Markdown from 'react-markdown';
+import IconButton from "@mui/material/IconButton";
+import PreviewIcon from '@mui/icons-material/Preview';
+import SaveIcon from '@mui/icons-material/Save';
+import DeleteIcon from '@mui/icons-material/Delete';
 import dayjs from "dayjs";
-import { useApiUpdateNote } from "./Utils";
+import { apiUpdateNote, apiDeleteNote } from "./Utils";
 
 
 export function Note(props) {
-    const { note } = props;
+    const { note, handleNoteChanged } = props;
     const [noteText, setNoteText] = useState(note ? note.text : "");
     const [noteFocused, setNoteFocused] = useState(false);
-    const updateNote = useApiUpdateNote();
 
 
-    const handleSaveKeys = useCallback((event, note, noteText) => {
-
-        if ((event.metaKey === true && event.key === "s")) {
-            const updatedNoteData = {
-                ...note,
-                text: noteText
-            }
-
-            console.log(updatedNoteData);
-            event.preventDefault();
-            window.removeEventListener('keydown', handleSaveKeys);
+    const handleNoteSave = () => {
+        if (note.text !== noteText) {
+            note.text = noteText;
+            apiUpdateNote(note);
             setNoteFocused(false);
-            updateNote(updatedNoteData);
+            handleNoteChanged();
         }
-    }, [updateNote]);
-
-
-    useEffect(() => {
-        if (noteFocused) {
-            window.addEventListener("keypress", handleSaveKeys);
-        } 
-        return () => {
-            document.removeEventListener('keydown', handleSaveKeys);
-          };
-    }, [noteFocused, handleSaveKeys])
-
+    }
+    
     const handleNoteFocus = () => {
         setNoteFocused(true);
+    }
+    
+    const handlePreview = () => {
+        setNoteFocused(false);
+    }
+    
+    const handleDeleteNote = () => {
+        apiDeleteNote(note.id);
+        handleNoteChanged();
     }
 
 
@@ -54,6 +50,29 @@ export function Note(props) {
             <Box position='static'>
                 <Typography variant='h4' sx={{ mb: '1vh' }}>{note.title}</Typography>
                 <Typography sx={{ mb: '1vh' }}>Created: {dayjs(new Date(note.created)).format("MM-DD-YYYY HH:MM")}</Typography>
+                <Toolbar sx={{ ml: -1 }}>
+                    <Typography>Actions</Typography>
+
+                    <Divider sx={{ mx: 2 }} orientation="vertical" flexItem />
+
+                    <IconButton
+                     title="Preview note"
+                     onClick={handlePreview}>
+                        <PreviewIcon />
+                    </IconButton>
+
+                    <IconButton
+                    title="Save note"
+                    onClick={handleNoteSave}>
+                        <SaveIcon />
+                    </IconButton>
+
+                    <IconButton
+                    title='Delete note'
+                    onClick={handleDeleteNote}>
+                        <DeleteIcon />
+                    </IconButton>
+                </Toolbar>
                 <Divider sx={{ mb: '5vh' }} />
             </Box>
             <Box 
@@ -70,7 +89,7 @@ export function Note(props) {
                 // <TextareaAutosize 
                 // onChange={changeNoteText} 
                 // defaultValue={notes[selectedNote].text} 
-                // className='note-text-area' /> 
+                // className='note-text-area' />
                 :
                 <div 
                  onClick={handleNoteFocus} 

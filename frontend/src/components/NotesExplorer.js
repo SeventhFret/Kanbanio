@@ -10,9 +10,10 @@ import FolderIcon from '@mui/icons-material/Folder';
 import DescriptionIcon from '@mui/icons-material/Description';
 import CreateIcon from '@mui/icons-material/Create';
 import Divider from '@mui/material/Divider';
-import Box from '@mui/material/Box';
+// import Box from '@mui/material/Box';
 import { IconButton, Toolbar, Typography } from '@mui/material';
 import { FolderFormDialog } from './FolderFormDialog';
+import { NoteFormDialog } from './NoteFormDialog';
 
 
 
@@ -30,6 +31,7 @@ export default function NotesExplorer(props) {
   const { changeSelectedNote, selectNote, folders, notes } = props;
   const [foldersState, setFoldersState] = useState(getSavedFoldersState());
   const [selectedNote, setSelectedNote] = useState(selectNote);
+  const [createNoteClicked, setCreateNoteClicked] = useState(false);
 
 
   const handleSelectedNote = (event, noteId) => {
@@ -52,6 +54,10 @@ export default function NotesExplorer(props) {
         });
       };
       
+    }
+
+    const handleCreateNoteClicked = () => {
+      setCreateNoteClicked(!createNoteClicked);
     }
 
     
@@ -77,10 +83,18 @@ export default function NotesExplorer(props) {
         <div style={{ display: 'flex', flexDirection: 'row', flexGrow: 1, alignItems: 'center' }}>
           <Typography variant='h5' p={2} flexGrow={1}>Notes</Typography>
           <Toolbar>
-            <IconButton sx={{ height: '100%' }}>
+            <IconButton
+            title='Create note'
+            onClick={handleCreateNoteClicked}
+            sx={{ height: '100%' }}>
               <CreateIcon />
             </IconButton>
           </Toolbar>
+            { createNoteClicked ? 
+            <NoteFormDialog
+            folders={folders}
+            handleCreateNoteClicked={handleCreateNoteClicked} />
+            : null }
         </div>
       }
     >

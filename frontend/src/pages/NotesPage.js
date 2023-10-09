@@ -1,20 +1,19 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SideBar from "../components/SideBar";
 import NotesExplorer from "../components/NotesExplorer";
 import { UnauthorizedErrorPage } from "../components/UnauthorizedError";
 import { Note } from '../components/Note';
-import { Box, Divider, Typography } from '@mui/material';
-import Markdown from 'react-markdown'
-import dayjs from 'dayjs';
 import { useApiNotes, useUsersFolders } from '../components/Utils';
-import TextField from '@mui/material/TextField';
 
 
 
 export function NotesPage({ userData, loggedIn }) {
-    const [selectedNote, setSelectedNote] = useState(0);
+    const [selectedNote, setSelectedNote] = useState();
+    const [noteChanged, setNoteChanged] = useState(false);
     const folders = useUsersFolders("N");
     const notes = useApiNotes();
+
+
 
     if (!loggedIn) {
         return ( <UnauthorizedErrorPage /> )
@@ -22,6 +21,12 @@ export function NotesPage({ userData, loggedIn }) {
 
     const changeSelectedNote = (noteInd) => {
         setSelectedNote(noteInd);
+    }
+
+    const handleNoteChanged = () => {
+        notes.filter((note) => {return note.id !== selectedNote})
+        setNoteChanged(true);
+        setSelectedNote(null);
     }
 
 
@@ -34,7 +39,10 @@ export function NotesPage({ userData, loggedIn }) {
             notes={notes} />
 
         { ((selectedNote || selectedNote === 0) && notes) ?
-            <Note note={notes[selectedNote]} />
+            <Note 
+            note={notes[selectedNote]}
+            handleNoteChanged={handleNoteChanged}
+            />
             : null }
         </div>
     )

@@ -41,9 +41,10 @@ export const useApiNotes = () => {
         .catch(error => {console.log(error);})
 
     }, [])
-    
-    return notes
-}
+
+        return notes
+    }
+
 
 
 export function useApiTodos() {
@@ -95,22 +96,39 @@ export function useApiCreateFolder(folderData) {
     
 }
 
-export function useApiDeleteFolder(folderId) {
+export function apiDeleteNote(noteId) {
+    const deleteUrl = "/notes/" + noteId + "/";
+    
+    api.delete(deleteUrl, {
+        headers: {
+            Authorization: "JWT " + localStorage.getItem('access')
+        }
+    })
+    .then(res => {console.log(res.data);})
+    .catch(error => {console.log(error);})
     
 }
 
 
-export function useApiUpdateNote() {
+export function apiUpdateNote(noteData) {
 
-    return (noteData) => {
-        const patchUrl = "/notes/" + noteData.id + "/";
-        
-        api.patch(patchUrl, noteData, {
-            headers: {
-                Authorization: "JWT " + localStorage.getItem('access')
-            }
-        })
-        .then(res => {console.log(res.data);})
-        .catch(error => {console.log(error);})
-    }
+    const patchUrl = "/notes/" + noteData.id + "/";
+    
+    api.patch(patchUrl, noteData, {
+        headers: {
+            Authorization: "JWT " + localStorage.getItem('access')
+        }
+    })
+    .then(res => {console.log(res.data);})
+    .catch(error => {console.log(error);})
+}
+
+export function apiCreateNote(noteData) {
+    api.post("/notes/", noteData, {
+        headers: {
+            Authorization: "JWT " + localStorage.getItem('access')
+        }
+    })
+    .then(res => {console.log(res.data);})
+    .catch(error => {console.log(error);})
 }

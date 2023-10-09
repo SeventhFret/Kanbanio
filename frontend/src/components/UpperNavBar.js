@@ -17,8 +17,13 @@ export function NavBar(loggedIn) {
                 <h2 style={{ flexGrow: 1 }}>Kanbanio</h2>
                 
                 <ThemeProvider theme={whiteBlackTheme}>
+                    { loggedIn ? 
+                    <Link to="/dashboard/">Dashboard</Link> :
+                    <>
                     <Link to="/register/" style={{ textDecoration: 'none' }}><Button variant='contained'>Register</Button></Link>
                     <Link to="/login/" style={{ textDecoration: 'none', marginLeft: '1vw' }}><Button variant='contained'>Login</Button></Link>
+                    </>
+                     }
                 </ThemeProvider>
             </Toolbar>
       </AppBar>
