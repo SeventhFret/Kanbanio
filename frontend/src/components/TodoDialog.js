@@ -35,7 +35,7 @@ const Transition = forwardRef(function Transition(props, ref) {
 
 
 export function TodoDialog(props) {
-    const { handleTodosChanges, todoData, folders, kanban } = props;
+    const { handleTodosChanged, todoData, folders, kanban } = props;
     const [folder, setFolder] = useState(folders ? folders[0].id : null);
     const [title, setTitle] = useState();
     const [endDate, setEndDate] = useState();
@@ -56,18 +56,17 @@ export function TodoDialog(props) {
         }
 
         handleEditClose();
-        handleTodosChanges();
+        handleTodosChanged();
     }
 
-    const submitDeletion = () => {
+    function submitDeletion() {
         apiDeleteTodo(todoData.id);
 
         handleDeleteClose();
-        handleTodosChanges();
+        handleTodosChanged();
 
     }
 
-    
     
     const handleFolderSelect = (e) => {
         setFolder(e.target.value);

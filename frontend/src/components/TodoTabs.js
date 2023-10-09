@@ -8,10 +8,32 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { TodoDialog } from "./TodoDialog";
+import { KanbanColumn } from "./KanbanColumn";
 
 
 export function KanbanTab(props) {
+    const { folders, columnColors, todos, handleTodosChanged } = props;
 
+    return (
+        <Box 
+            component='div' 
+            value={1} 
+            index={1} 
+            display="flex"
+            gap={5} 
+            sx={{ height: "80vh", overflow: "auto" }}>
+                { folders ? folders.map((folder) => (
+                    <KanbanColumn 
+                     handleTodosChanged={handleTodosChanged}
+                     columnColor={columnColors[folder.title]}
+                     key={folder.id} 
+                     title={folder.title} 
+                     todos={todos} 
+                     folderId={folder.id} 
+                     folders={folders} />
+                )) : null}
+            </Box>
+    )
 }
 
 
@@ -60,7 +82,7 @@ export function ListTab(props) {
                 { todos ? todos.map((todo) => (
                     (todo.folder === folder.id) ? 
                         <TodoDialog 
-                        handleTodosChanges={handleTodosChanged}
+                        handleTodosChanged={() => {handleTodosChanged(1)}}
                         key={todo.id}
                         kanban={false} 
                         todoData={todo} 

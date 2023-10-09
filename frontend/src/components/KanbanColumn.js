@@ -3,6 +3,7 @@ import Typography from "@mui/material/Typography";
 import { TodoDialog } from "./TodoDialog";
 
 export function KanbanColumn(props) {
+    const { handleTodosChanged } = props;
 
     return (
         <Box component='div'
@@ -18,7 +19,12 @@ export function KanbanColumn(props) {
             <Box display="flex" flexDirection="column" gap={1}>
                 { props.todos ? props.todos.map((todo) => (
                     (todo.folder === props.folderId) ? 
-                        <TodoDialog key={props.folderId} kanban={true} todoData={todo} folders={props.folders} />
+                        <TodoDialog 
+                         handleTodosChanged={handleTodosChanged}
+                         key={props.folderId} 
+                         kanban={true} 
+                         todoData={todo} 
+                         folders={props.folders} />
                     : null
                 )) : null }
             </Box>
