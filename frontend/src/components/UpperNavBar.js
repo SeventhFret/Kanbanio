@@ -9,7 +9,7 @@ import { whiteBlackTheme } from './Themes';
 
 
 
-export function NavBar(loggedIn) {
+export function NavBar({loggedIn}) {
     return (
         <Box sx={{ flexGrow: 1 }}>
         <AppBar sx={{ backgroundColor: "black", color: "white" }} position='fixed'>
@@ -18,7 +18,7 @@ export function NavBar(loggedIn) {
                 
                 <ThemeProvider theme={whiteBlackTheme}>
                     { loggedIn ? 
-                    <Link to="/dashboard/">Dashboard</Link> :
+                    <Link to="/dashboard/" style={{ textDecoration: 'none' }}><Button variant='contained'>Dashboard</Button></Link> :
                     <>
                     <Link to="/register/" style={{ textDecoration: 'none' }}><Button variant='contained'>Register</Button></Link>
                     <Link to="/login/" style={{ textDecoration: 'none', marginLeft: '1vw' }}><Button variant='contained'>Login</Button></Link>

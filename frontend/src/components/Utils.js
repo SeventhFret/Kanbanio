@@ -64,7 +64,7 @@ export function useApiTodos() {
 }
 
 
-export function useUsersFolders(type, folderChanged) {
+export function useApiGetFolders(type, folderChanged) {
     const [folders, setFolders] = useState([]);
     const requestUrl = "/folder/?type=" + type;
     
@@ -75,12 +75,63 @@ export function useUsersFolders(type, folderChanged) {
             }
         })
         .then(res => {setFolders(res.data)})
-        .catch(error => {console.log(error);})
+        .catch(error => {console.log(error)})
     }, [requestUrl, folderChanged]);
     
     return folders
 }
 
+export function apiDeleteTodo(todoId) {
+    const deleteUrl = "/todo/" + todoId;
+
+    api.delete(deleteUrl, {
+        headers: {
+            Authorization: "JWT " +  localStorage.getItem("access")
+        }
+    })
+    .then(res => {console.log(res);})
+    .catch(err => {console.log(err);})
+}
+
+export function useApiGetTodos(todosChanged) {
+    const [todos, setTodos] = useState([]);
+
+    useEffect(() => {
+        api.get("/todo/", {
+            headers: {
+                Authorization: "JWT " + localStorage.getItem("access")
+            }
+        })
+        .then(res => {setTodos(res.data)})
+        .catch(error => {setTodos(false)})    
+    }, [todosChanged])
+
+    return todos
+
+}
+
+
+export function apiUpdateTodo(todoId, updatedTodoData) {
+    const patchUrl = "/todo/" + todoId + "/";
+
+    api.patch(patchUrl, updatedTodoData, {
+        headers: {
+            Authorization: 'JWT ' + localStorage.getItem("access")
+        },
+    })
+    .then(res => {window.location.reload();})
+    .catch(error => {console.log(error);})
+}
+
+export function apiCreateTodo(newTaskData) {
+    api.post("/todo/", newTaskData, {
+        headers: {
+            "Authorization": "JWT " + localStorage.getItem("access")
+        }
+    })
+    .then(res => {console.log(res)})
+    .catch(error => {console.log(error)})
+}
 
 export function useApiCreateFolder(folderData) {
 

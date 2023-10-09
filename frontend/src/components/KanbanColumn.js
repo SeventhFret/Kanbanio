@@ -4,7 +4,6 @@ import { TodoDialog } from "./TodoDialog";
 
 export function KanbanColumn(props) {
 
-
     return (
         <Box component='div'
         display='flex' 

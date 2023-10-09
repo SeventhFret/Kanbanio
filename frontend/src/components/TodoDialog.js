@@ -23,7 +23,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { api } from './ApiClient';
+// import { api } from './ApiClient';
+import { apiDeleteTodo, apiUpdateTodo, apiCreateTodo } from './Utils';
 import { redButtonTheme } from './Themes';
 import dayjs from 'dayjs';
 
@@ -34,7 +35,7 @@ const Transition = forwardRef(function Transition(props, ref) {
 
 
 export function TodoDialog(props) {
-    const { todoData, folders, kanban } = props;
+    const { handleTodosChanges, todoData, folders, kanban } = props;
     const [folder, setFolder] = useState(folders ? folders[0].id : null);
     const [title, setTitle] = useState();
     const [endDate, setEndDate] = useState();
@@ -43,62 +44,27 @@ export function TodoDialog(props) {
     const [openDeleteAlert, setOpenDeleteAlert] = useState(false);
 
     function submitTodo() {
-        if (todoData) {
-            const patchUrl = "/todo/" + todoData.id + "/";
-
-            const updatedTodoData = {
-                "title": title,
-                "end_date": dayjs(endDate).format('YYYY-MM-DDTHH:mm:ssZ'),
-                "folder": folder
-            }
-
-            api.patch(patchUrl, updatedTodoData, {
-                headers: {
-                    Authorization: 'JWT ' + localStorage.getItem("access")
-                },
-            })
-            .then(res => {handleEditClose(); window.location.reload();})
-            .catch(error => {handleEditClose();})
-            
-        } else {
-            const newTaskData = {
-                "title": title,
-                "folder": folder,
-                "end_date": dayjs(endDate).format('YYYY-MM-DDTHH:mm:ssZ')
-            }
-            api.post("/todo/", newTaskData, {
-                headers: {
-                    "Authorization": "JWT " + localStorage.getItem("access")
-                }
-            })
-            .then(res => {console.log(res);handleEditClose();})
-            .catch(error => {console.log(error);handleEditClose();})
-
-            setTimeout(function() {
-                window.location.reload();
-            }, 1000);
-
+        const newTaskData = {
+            "title": title,
+            "folder": folder,
+            "end_date": dayjs(endDate).format('YYYY-MM-DDTHH:mm:ssZ')
         }
+        if (todoData) {
+            apiUpdateTodo(todoData.id, newTaskData);
+        } else {
+            apiCreateTodo(newTaskData);
+        }
+
+        handleEditClose();
+        handleTodosChanges();
     }
 
-    function submitDeletion() {
-        const deleteUrl = "/todo/" + todoData.id;
-
-        api.delete(deleteUrl, {
-            headers: {
-                Authorization: "JWT " +  localStorage.getItem("access")
-            }
-        })
-        .then(res => {console.log(res);})
-        .catch(err => {console.log(err);})
+    const submitDeletion = () => {
+        apiDeleteTodo(todoData.id);
 
         handleDeleteClose();
+        handleTodosChanges();
 
-        
-
-        setTimeout(function() {
-            window.location.reload();
-        }, 1000)
     }
 
     
@@ -127,8 +93,6 @@ export function TodoDialog(props) {
         setOpenDeleteAlert(false);
     };
 
-    
-
 
     return (
         <>
@@ -150,10 +114,12 @@ export function TodoDialog(props) {
                 { dayjs(new Date(todoData.end_date)).format("DD.MM.YYYY HH:MM") }
             </Typography>
         </ListItemButton>
-        <div>
+
         <IconButton onClick={handleDeleteOpen} type='submit'>
             <DeleteForeverIcon />
         </IconButton>
+        { openDeleteAlert ? 
+        <div>
         <Dialog
             open={openDeleteAlert}
             TransitionComponent={Transition}
@@ -161,7 +127,7 @@ export function TodoDialog(props) {
             onClose={handleDeleteClose}
             aria-describedby="alert-dialog-slide-description"
         >
-            <DialogTitle>{"Delete task"}</DialogTitle>
+            <DialogTitle>Delete task</DialogTitle>
             <DialogContent>
             <DialogContentText id="alert-dialog-slide-description">
                 Are you sure you want to delete this task?
@@ -175,6 +141,7 @@ export function TodoDialog(props) {
             </DialogActions>
         </Dialog>
         </div>
+        : null }
         </ListItem>
         : 
         <ListItemButton onClick={handleEditOpen}>
@@ -182,6 +149,7 @@ export function TodoDialog(props) {
             Add task
         </ListItemButton>
         }
+        { openEdit ? 
         <div style={{ minWidth: '30vw' }}>
           <Dialog
             fullWidth={true}
@@ -233,6 +201,7 @@ export function TodoDialog(props) {
             </DialogActions>
           </Dialog>
         </div>
+        : null }
         </>
       );
 

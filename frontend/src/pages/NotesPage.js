@@ -3,7 +3,7 @@ import SideBar from "../components/SideBar";
 import NotesExplorer from "../components/NotesExplorer";
 import { UnauthorizedErrorPage } from "../components/UnauthorizedError";
 import { Note } from '../components/Note';
-import { useApiNotes, useUsersFolders } from '../components/Utils';
+import { useApiNotes, useApiGetFolders } from '../components/Utils';
 
 
 
@@ -11,7 +11,7 @@ export function NotesPage({ userData, loggedIn }) {
     const [selectedNote, setSelectedNote] = useState();
     const [noteChanged, setNoteChanged] = useState(false);
     const [folderChanged, setFolderChanged] = useState(false);
-    const folders = useUsersFolders("N", folderChanged);
+    const folders = useApiGetFolders("N", folderChanged);
     const notes = useApiNotes(noteChanged);
 
 
@@ -26,7 +26,6 @@ export function NotesPage({ userData, loggedIn }) {
     const handleNoteChanged = (action) => {
         setNoteChanged(true);
         if (action === 'deleted') {
-            // notes.filter((note) => {return note.id !== selectedNote})
             setSelectedNote(null);
         } 
     }
