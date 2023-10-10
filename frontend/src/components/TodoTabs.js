@@ -86,7 +86,8 @@ export function ListTab(props) {
                         key={todo.id}
                         kanban={false} 
                         todoData={todo} 
-                        folders={folders} />
+                        folders={folders}
+                        currentFolder={todos.folder} />
                         : null
                         )) : null }
                 </List>

@@ -34,8 +34,8 @@ const Transition = forwardRef(function Transition(props, ref) {
 
 
 export function TodoDialog(props) {
-    const { handleTodosChanged, todoData, folders, kanban } = props;
-    const [folder, setFolder] = useState(folders ? folders[0].id : null);
+    const { handleTodosChanged, todoData, folders, currentFolder, kanban } = props;
+    const [folder, setFolder] = useState(currentFolder ? currentFolder : null);
     const [title, setTitle] = useState();
     const [endDate, setEndDate] = useState();
 
@@ -169,7 +169,7 @@ export function TodoDialog(props) {
                     <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    defaultValue={todoData ? todoData.folder : folder ? folder : folders[0].id}
+                    defaultValue={todoData ? todoData.folder : currentFolder ? currentFolder : folders[0].id}
                     label="Status"
                     onChange={handleFolderSelect}
                     >

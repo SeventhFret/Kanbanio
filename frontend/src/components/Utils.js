@@ -43,7 +43,24 @@ export const useApiNotes = (noteChanged) => {
     }, [noteChanged])
 
         return notes
-    }
+}
+
+
+export function useApiGetLatestNotes() {
+    const [latestNotes, setLatestNotes] = useState([]);
+    
+    useEffect(() => {
+        api.get("/notes/?latest", {
+            headers: {
+                "Authorization": "JWT " + localStorage.getItem("access")
+            }
+        })
+        .then(res => {setLatestNotes(res.data)})
+        .catch(errors => {console.log(errors);})
+    }, []);
+
+    return latestNotes
+}
 
 
 
@@ -108,6 +125,22 @@ export function useApiGetTodos(todosChanged) {
 
     return todos
 
+}
+
+export function useApiGetLatestTodos() {
+    const [latestTodos, setLatestTodos] = useState([]);
+    
+    useEffect(() => {
+        api.get("/todo/?latest", {
+            headers: {
+                "Authorization": "JWT " + localStorage.getItem("access")
+            }
+        })
+        .then(res => {setLatestTodos(res.data)})
+        .catch(errors => {console.log(errors);})
+    }, []);
+
+    return latestTodos
 }
 
 

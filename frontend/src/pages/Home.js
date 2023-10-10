@@ -10,6 +10,7 @@ import { blackWhiteTheme } from "../components/Themes";
 import { animateScroll } from 'react-scroll';
 import { motion } from 'framer-motion';
 import { Player } from "@lottiefiles/react-lottie-player";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -17,10 +18,13 @@ export function Home({loggedIn}) {
     const [animateProp, setAnimateProp] = useState({});
     const [displayHeader, setDisplayHeader] = useState(true);
     const [hideFirstSection, setHideFirstSection] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        document.body.style.overflow = 'hidden';
-    }, [])
+        if (!loggedIn) {
+            document.body.style.overflow = 'hidden';
+        }
+    }, [loggedIn])
     
     const handleStartButton = () => {
         setAnimateProp({ width: "100vw", height: "100vh", marginTop: '-2vh' });
@@ -38,7 +42,7 @@ export function Home({loggedIn}) {
     return (
         <>
 
-            { hideFirstSection ? <NavBar loggedIn={loggedIn} /> : null }
+            { hideFirstSection || loggedIn ? <NavBar loggedIn={loggedIn} /> : null }
 
             <div id="firstSection" className="section flex f-c">
                 { (displayHeader || hideFirstSection) ? 
@@ -50,8 +54,9 @@ export function Home({loggedIn}) {
                     <Button 
                      variant="contained" 
                      size="large"
-                     onClick={handleStartButton}
+                     onClick={loggedIn ? () => {navigate("/dashboard/")} : handleStartButton}
                      sx={{ mt: 5 }}>{displayHeader ? "Get started" : ''}
+                        {}
                         <motion.div
                         initial={{ width: 0, height: 0 }}
                         animate={animateProp}
