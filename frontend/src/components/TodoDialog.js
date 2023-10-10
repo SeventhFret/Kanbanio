@@ -23,7 +23,6 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-// import { api } from './ApiClient';
 import { apiDeleteTodo, apiUpdateTodo, apiCreateTodo } from './Utils';
 import { redButtonTheme } from './Themes';
 import dayjs from 'dayjs';
@@ -31,7 +30,7 @@ import dayjs from 'dayjs';
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
-  });
+});
 
 
 export function TodoDialog(props) {
@@ -54,7 +53,6 @@ export function TodoDialog(props) {
         } else {
             apiCreateTodo(newTaskData);
         }
-
         handleEditClose();
         handleTodosChanged();
     }
@@ -64,7 +62,6 @@ export function TodoDialog(props) {
 
         handleDeleteClose();
         handleTodosChanged();
-
     }
 
     
@@ -96,14 +93,13 @@ export function TodoDialog(props) {
     return (
         <>
         { todoData ? 
-        
         <ListItem>
         <ListItemButton sx={{ display: 'flex',
          flexDirection: kanban ? 'column' : 'row', 
          alignItems: kanban ? "flex-start" : 'initial',
          border: kanban ? "1px solid blak" : 'none',
          borderRadius: kanban ? '10px' : 0,
-         flexGrow: 1 }}  onClick={handleEditOpen}>
+         flexGrow: 1 }} onClick={handleEditOpen}>
             <Typography display='flex' key={todoData.id} sx={{ minWidth: kanban ? null : '80%' , flexGrow: 1 }}>
                 {kanban ? <AbcIcon sx={{ mr: '0.5vw' }} /> : null}
                 {todoData.title}

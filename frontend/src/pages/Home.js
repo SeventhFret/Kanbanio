@@ -1,27 +1,67 @@
 import "./Home.css";
+import { useEffect, useState } from "react";
+import notesDemo from '../images/notes-demo.png';
+import todosDemo from '../images/todos-demo.png';
+import spinningBall from "../lotties/spinningBall.json";
 import { Typography, ThemeProvider, Box } from "@mui/material";
 import { NavBar } from "../components/UpperNavBar";
 import { Button } from "@mui/material";
 import { blackWhiteTheme } from "../components/Themes";
-import { Link } from 'react-scroll';
+import { animateScroll } from 'react-scroll';
+import { motion } from 'framer-motion';
 import { Player } from "@lottiefiles/react-lottie-player";
-import spinningBall from "../lotties/spinningBall.json";
 
 
 
 export function Home({loggedIn}) {
+    const [animateProp, setAnimateProp] = useState({});
+    const [displayHeader, setDisplayHeader] = useState(true);
+    const [hideFirstSection, setHideFirstSection] = useState(false);
+
+    useEffect(() => {
+        document.body.style.overflow = 'hidden';
+    }, [])
+    
+    const handleStartButton = () => {
+        setAnimateProp({ width: "100vw", height: "100vh", marginTop: '-2vh' });
+        setDisplayHeader(false);
+    }
+
+    const animationFinished = () => {
+        animateScroll.scrollTo(1000, {smooth: true, duration: 1000, delay: 100});
+        setTimeout(() => {
+            setHideFirstSection(true);
+            document.body.style.overflow = 'auto';
+        }, 1100);
+    } 
 
     return (
         <>
-            <NavBar loggedIn={loggedIn} />
+
+            { hideFirstSection ? <NavBar loggedIn={loggedIn} /> : null }
 
             <div id="firstSection" className="section flex f-c">
-                <Typography variant="h1" sx={{ color: 'black' }}>Welome to Kanbanio!</Typography>
+                { (displayHeader || hideFirstSection) ? 
+                    <Typography variant="h1" sx={{ color: 'black' }}>Welome to Kanbanio!</Typography>
+                : null }
+
+                { hideFirstSection ? null :
                 <ThemeProvider theme={blackWhiteTheme}>
-                    <Link to="secondSection" spy={true} smooth={true} duration={800}>
-                        <Button variant="contained" size="large" sx={{ mt: 5 }}>Get started</Button>
-                    </Link>
+                    <Button 
+                     variant="contained" 
+                     size="large"
+                     onClick={handleStartButton}
+                     sx={{ mt: 5 }}>{displayHeader ? "Get started" : ''}
+                        <motion.div
+                        initial={{ width: 0, height: 0 }}
+                        animate={animateProp}
+                        transition={{ duration: 1, type: 'spring' }}
+                        onAnimationComplete={animationFinished}
+                        >
+                        </motion.div>
+                    </Button>
                 </ThemeProvider>
+                }
             </div>
 
             <div id="secondSection" className="section flex f-c">
@@ -41,6 +81,65 @@ export function Home({loggedIn}) {
                     </Box>
                 </Box>
             </div>
+
+            <div className="section flex f-c">
+                <Box display='flex' flexDirection='row'>
+                    <img
+                    src={notesDemo}
+                    alt="Notes demonstrations"
+                    height={300}
+                    style={{
+                        border: '2px solid black'
+                    }}
+                     />
+                     <Box 
+                      display='flex' 
+                      flexDirection='column' 
+                      justifyContent='center' 
+                      sx={{ ml: '5vw' }}>
+                        <Typography variant="h2">Notes</Typography>
+                        <Typography maxWidth={600} paragraph variant="h5">
+                            Kanbanio provides you with easy and pleasant note taking experience. 
+                            Store your notes in different folders. Our notes engine support Markdown 
+                            syntax which brings you efficiency of note taking process.
+                        </Typography>
+                     </Box>
+                </Box>
+            </div>
+
+            <div className="section flex f-c">
+                <Box display='flex' flexDirection='row'>
+                     <Box 
+                      display='flex' 
+                      flexDirection='column' 
+                      justifyContent='center' 
+                      sx={{ ml: '5vw' }}>
+                        <Typography variant="h2">Todos</Typography>
+                        <Typography maxWidth={600} paragraph variant="h5">
+                            With Kanbanio you will always good in tracking your goals.
+                            Our task list feature will help you to stay focused on tasks
+                            that have to be done.
+                        </Typography>
+                     </Box>
+                    <img
+                    src={todosDemo}
+                    alt="Todos demonstrations"
+                    height={250}
+                    style={{
+                        border: '2px solid black'
+                    }}
+                     />
+                </Box>
+            </div>
+            
+            <ThemeProvider theme={blackWhiteTheme}>
+                <Box
+                 className="flex "
+                 sx={{ backgroundColor: 'primary.main', height: '10vh' }}>
+                    <Typography sx={{ color: "primary.contrastText" }} variant="h4">Kanbanio 2023</Typography>
+                </Box>
+            </ThemeProvider>
+
         </>
     )
 }
