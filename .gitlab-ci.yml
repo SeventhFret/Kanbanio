@@ -5,9 +5,9 @@ pages:
   stage: deploy
   cache:
     paths:
-      - frontend/node_modules/
+      - node_modules/
   script:
-    - cd frontend
+    - mv frontend/ ./
     - npm install
     - npm run build
     - rm -rf public
@@ -15,4 +15,4 @@ pages:
     - mv build public
   artifacts:
     paths:
-      - frontend/public
+      - public
