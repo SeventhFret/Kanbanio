@@ -1,0 +1,20 @@
+image: node
+
+before_script: []
+pages:
+  stage: deploy
+  cache:
+    paths:
+      - frontend/node_modules/
+  script:
+    - cd frontend
+    - npm install
+    - npm run build
+    - rm -rf public
+    - cp build/index.html build/404.html
+    - mv build public
+  artifacts:
+    paths:
+      - frontend/public
+  only:
+    - deploy
