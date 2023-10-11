@@ -13,7 +13,6 @@ export function getRefreshToken() {
     .catch(error => {
         localStorage.clear();
     })
-    console.log('Obtained token');
 
 }
 

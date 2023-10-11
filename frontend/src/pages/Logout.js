@@ -6,7 +6,6 @@ export function LogoutPage({ loggedIn }) {
     const navigate = useNavigate();
     
     useEffect(() => {
-        console.log(loggedIn);
 
         if (loggedIn) {
             localStorage.clear();

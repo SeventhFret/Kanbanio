@@ -36,12 +36,14 @@ function App() {
       .catch(error => {
         if (error) {
           console.clear();
-          if (error.response.status === 401) {
-            getRefreshToken();
-            console.log("refreshed");
-            setTimeout(() => {
-              window.location.reload();
-            }, 1000)
+          if (error.response) {
+            if (error.response.status === 401) {
+              getRefreshToken();
+              setTimeout(() => {
+                window.location.reload();
+              }, 1000)
+            }
+
           }
       }
       })

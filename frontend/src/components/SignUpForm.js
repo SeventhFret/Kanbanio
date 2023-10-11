@@ -38,7 +38,9 @@ export function SignUpForm() {
         })
         .catch(error => {
             if (error) {
-                setErrors(error.response.data['errors']);
+                if (error.response) {
+                    setErrors(error.response.data['errors']);
+                }
                 setMessages([]);
             }
         })

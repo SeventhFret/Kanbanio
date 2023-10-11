@@ -39,7 +39,6 @@ export function LoginForm() {
             if (error) {
                 setLoading(false);
                 setErrors(["Invalid username or password"]);
-            console.log(error);
             }
         })
     } 

@@ -32,8 +32,6 @@ export function ProfilePage({ userData, loggedIn }) {
 
     const submitPhoto = (e) => {
         e.preventDefault();
-        console.log(e.target.files[0]);
-        console.log(formData);
 
         formData.append("avatar", e.target.files[0]);
         api.post("/users/avatar/", formData, {
