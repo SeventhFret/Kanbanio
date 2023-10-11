@@ -41,7 +41,6 @@ export function Home({loggedIn}) {
 
     return (
         <>
-
             { hideFirstSection || loggedIn ? <NavBar loggedIn={loggedIn} /> : null }
 
             <div id="firstSection" className="section flex f-c">
@@ -56,7 +55,6 @@ export function Home({loggedIn}) {
                      size="large"
                      onClick={loggedIn ? () => {navigate("/dashboard/")} : handleStartButton}
                      sx={{ mt: 5 }}>{displayHeader ? "Get started" : ''}
-                        {}
                         <motion.div
                         initial={{ width: 0, height: 0 }}
                         animate={animateProp}
@@ -144,7 +142,6 @@ export function Home({loggedIn}) {
                     <Typography sx={{ color: "primary.contrastText" }} variant="h4">Kanbanio 2023</Typography>
                 </Box>
             </ThemeProvider>
-
         </>
     )
 }

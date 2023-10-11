@@ -52,7 +52,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Home loggedIn={loggedIn} />} />
       <Route path="/login/" element={<LoginPage />} />
-      <Route path="/logout/" element={<LogoutPage />} />
+      <Route path="/logout/" element={<LogoutPage loggedIn={loggedIn} />} />
       <Route path="/register/" element={<SignUpPage />} />
       <Route path="/dashboard/" element={<DashboardPage userData={userData} loggedIn={loggedIn}/>} />
       <Route path="/profile/" element={ <ProfilePage userData={userData} loggedIn={loggedIn} /> } />

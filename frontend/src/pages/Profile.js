@@ -13,12 +13,13 @@ import { redButtonTheme } from "../components/Themes";
 import { UnauthorizedErrorPage } from "../components/UnauthorizedError";
 import { useEffect, useState } from "react";
 import { api } from "../components/ApiClient";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 
 export function ProfilePage({ userData, loggedIn }) {
     const [avatarUrl, setAvatarUrl] = useState("");
     const [messages, setMessages] = useState([]);
+    const navigate = useNavigate();
     let formData = new FormData();
 
 
@@ -79,26 +80,31 @@ export function ProfilePage({ userData, loggedIn }) {
                     <Box display='flex' flexDirection='column' width="60%" gap={2}>
                         { userData ? 
                         <>
-                        <Typography variant="h4">First name: {userData['first_name']}</Typography>
-                        <Typography variant="h4">Last name: {userData['last_name']}</Typography>
-                        <Typography variant="h4">Email: {userData['email']}</Typography>
+                            <Typography variant="h4">First name: {userData['first_name']}</Typography>
+                            <Typography variant="h4">Last name: {userData['last_name']}</Typography>
+                            <Typography variant="h4">Email: {userData['email']}</Typography>
                         </>
-
                         : null
                     }
                     </Box>
                 <Divider sx={{ my: 5 }} />
                 <ThemeProvider theme={redButtonTheme}>
-                    <Link to="/logout/" className="link">
-                        <Button variant="contained" sx={{ width: '20%' }}>Logout</Button>
-                    </Link>
+                    {/* <Link to="/logout/" className="link"> */}
+                        <Button
+                         variant="contained"
+                         sx={{ width: '20%' }}
+                         onClick={() => {navigate('/logout/', {loggedIn: true});}}>Logout</Button>
+                    {/* </Link> */}
                 </ThemeProvider>
                 </Box>
             )
         }
 
         return (
-            <SideBar selected={'Profile'} userData={userData} mainContent={< MainContent />} />
+            <SideBar 
+             selected={'Profile'} 
+             userData={userData} 
+             mainContent={< MainContent />} />
         )
 
 }
