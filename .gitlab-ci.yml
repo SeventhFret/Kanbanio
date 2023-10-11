@@ -7,7 +7,7 @@ pages:
     paths:
       - node_modules/
   script:
-    - mv frontend/ ./
+    - mv frontend/* ./
     - npm install
     - npm run build
     - rm -rf public
