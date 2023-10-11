@@ -16,5 +16,3 @@ pages:
   artifacts:
     paths:
       - frontend/public
-  only:
-    - deploy
