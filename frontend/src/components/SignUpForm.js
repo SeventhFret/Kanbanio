@@ -1,5 +1,5 @@
-import Box from "@mui/material/Box";
 import "./Forms.css";
+import Box from "@mui/material/Box";
 import { useState } from "react";
 import { whiteBlackTheme } from "./Themes";
 import { Alert } from "@mui/material";
@@ -76,7 +76,13 @@ export function SignUpForm() {
                     <Button variant="contained" type="submit">Create account</Button>
                 </ThemeProvider>
 
-                <p>Already have an account? <Link to="/login/" className="link">Login</Link></p>
+                <Box>
+                    <p style={{ color: 'white' }}>Already have an account? <Link style={{ color: 'white' }} to="/login/">Login</Link></p>
+                    <p style={{ color: 'white' }}>
+                            Back to <Link to="/" style={{ color: 'white' }}>Home</Link>
+                    </p>
+                </Box>
+
 
                 { errors ? 
                 errors.map((error, errInd) => (<Alert key={errInd} severity="error">{error}</Alert>))

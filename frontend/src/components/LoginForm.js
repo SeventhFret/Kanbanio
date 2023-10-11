@@ -1,3 +1,4 @@
+import './Forms.css';
 import Box from "@mui/material/Box";
 import { useState } from "react";
 import { whiteBlackTheme } from "./Themes";
@@ -82,7 +83,16 @@ export function LoginForm() {
                     <Button variant="contained" type="submit">Login</Button>
                 </ThemeProvider>
 
-                <p>Don't have an account? <Link to="/register/" className="link">Create account</Link></p>
+                <Box>
+                    <p style={{ color: 'white' }}>Don't have an account? <Link style={{ color: 'white' }} to="/register/">
+                        Create account
+                        </Link>
+                    </p>
+
+                    <p style={{ color: 'white' }}>
+                        Back to <Link to="/" style={{ color: 'white' }}>Home</Link>
+                    </p>
+                </Box>
 
                 { errors ? 
                 errors.map((error, errInd) => (<Alert key={errInd} severity="error">{error}</Alert>))
