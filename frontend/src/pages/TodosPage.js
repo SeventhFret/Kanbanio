@@ -12,7 +12,7 @@ import { KanbanTab, ListTab } from "../components/TodoTabs";
 
 const columnColors = {
     "Todo": "rgba(162, 163, 162, 0.504)",
-    "In Progress": "rgba(246, 214, 68, 0.504)",
+    "In progress": "rgba(246, 214, 68, 0.504)",
     "Done": "rgba(41, 241, 41, 0.504)"
 }
 
