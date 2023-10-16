@@ -17,43 +17,50 @@ function App() {
   const accessToken = localStorage.getItem("access");
   const refreshToken = localStorage.getItem("refresh");
   const [userData, setUserData] = useState();
+  const [loggedInChanged, setLoggedInChanged] = useState(false);
   let loggedIn = false;
 
   
-
   if (accessToken && refreshToken) {
     loggedIn = true;
+    // setLoggedIn(true);
   }
 
+  const handleLoggedInChanged = () => {
+    setLoggedInChanged(!loggedInChanged);
+  }
+
+  
   useEffect(() => {
+    console.log(loggedIn);
     if (loggedIn) {
       api.get("/users/get/", {
         headers: {
           Authorization: "JWT " + accessToken
         }
       })
-      .then(res => {setUserData(res.data.profile)})
+      .then(res => {setUserData(res.data.profile); console.log(res.data);})
       .catch(error => {
         if (error) {
-          console.clear();
+          // console.clear();
+          console.log(error);
           if (error.response) {
             if (error.response.status === 401) {
               getRefreshToken();
-              setTimeout(() => {
-                window.location.reload();
-              }, 1000)
+              // setTimeout(() => {
+              //   window.location.reload();
+              // }, 1000)
             }
-
           }
       }
       })
     }
-  }, [loggedIn, accessToken]);
+  }, [loggedIn, loggedInChanged, accessToken]);
 
   return (
     <Routes>
       <Route path="/" element={<Home loggedIn={loggedIn} />} />
-      <Route path="/login/" element={<LoginPage />} />
+      <Route path="/login/" element={<LoginPage handleLoggedInChanged={handleLoggedInChanged} />} />
       <Route path="/logout/" element={<LogoutPage loggedIn={loggedIn} />} />
       <Route path="/register/" element={<SignUpPage />} />
       <Route path="/dashboard/" element={<DashboardPage userData={userData} loggedIn={loggedIn}/>} />

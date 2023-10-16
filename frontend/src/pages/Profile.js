@@ -36,67 +36,65 @@ export function ProfilePage({ userData, loggedIn }) {
         formData.append("avatar", e.target.files[0]);
         api.post("/users/avatar/", formData, {
             headers: {
-                "Content-Type": "multipart/form-data"
+                "Content-Type": "multipart/form-data",
+                "Authorization": "JWT " + localStorage.getItem('access')
             }
         })
         .then(resp => {setMessages(resp.data.messages)})
         .catch(error => {console.log(error);})
-
     }
-
 
     if (!loggedIn) {
         return (
             <UnauthorizedErrorPage />
         )
     }
-        const MainContent = () => {
-            return (                
-                <Box display='flex' flexDirection='column' flexGrow={1}>
-                    <Box mb={2}>
-                        <Typography variant="h3">{userData ? userData['username'] : 'User'}</Typography>
-                    </Box>
-
-                    <Divider />
-
-                    <Box display='flex' flexDirection='row' my={5}>
-                        <Avatar src={avatarUrl ? avatarUrl : null} sx={{ width: '10vw', height: '10vw' }} />
-                        <Box display='flex' justifyContent='center' flexDirection='column' ml={5}>
-                            <Typography variant="h5">Change avatar</Typography>
-                            <form style={{ marginTop: '2vh' }} encType="multipart/form-data">
-                            <Button component="label" variant="contained" startIcon={<CloudUploadIcon />} type="submit">
-                                Upload file
-                                <input onChange={submitPhoto} type="file" hidden accept="image/png image/jpg"></input>
-                            </Button>
-                            </form>
-                            { messages.map((message) => (
-                                <Alert sx={{ mt: 2 }}>{message}</Alert>
-                            )) }
-                        </Box>
-                    </Box>
-
-                    <Box display='flex' flexDirection='column' width="60%" gap={2}>
-                        { userData ? 
-                        <>
-                            <Typography variant="h4">First name: {userData['first_name']}</Typography>
-                            <Typography variant="h4">Last name: {userData['last_name']}</Typography>
-                            <Typography variant="h4">Email: {userData['email']}</Typography>
-                        </>
-                        : null
-                    }
-                    </Box>
-                <Divider sx={{ my: 5 }} />
-                <ThemeProvider theme={redButtonTheme}>
-                    {/* <Link to="/logout/" className="link"> */}
-                        <Button
-                         variant="contained"
-                         sx={{ width: '20%' }}
-                         onClick={() => {navigate('/logout/', {loggedIn: true});}}>Logout</Button>
-                    {/* </Link> */}
-                </ThemeProvider>
+    
+    const MainContent = () => {
+        return (                
+            <Box display='flex' flexDirection='column' flexGrow={1}>
+                <Box mb={2}>
+                    <Typography variant="h3">{userData ? userData['username'] : 'User'}</Typography>
                 </Box>
-            )
-        }
+
+                <Divider />
+
+                <Box display='flex' flexDirection='row' my={5}>
+                    <Avatar src={avatarUrl ? avatarUrl : null} sx={{ width: '10vw', height: '10vw' }} />
+                    <Box display='flex' justifyContent='center' flexDirection='column' ml={5}>
+                        <Typography variant="h5">Change avatar</Typography>
+                        <form style={{ marginTop: '2vh' }} encType="multipart/form-data">
+                        <Button component="label" variant="contained" startIcon={<CloudUploadIcon />} type="submit">
+                            Upload file
+                            <input onChange={submitPhoto} type="file" hidden accept="image/png image/jpg"></input>
+                        </Button>
+                        </form>
+                        { messages.map((message) => (
+                            <Alert sx={{ mt: 2 }}>{message}</Alert>
+                        )) }
+                    </Box>
+                </Box>
+
+                <Box display='flex' flexDirection='column' width="60%" gap={2}>
+                    { userData ? 
+                    <>
+                        <Typography variant="h4">First name: {userData['first_name']}</Typography>
+                        <Typography variant="h4">Last name: {userData['last_name']}</Typography>
+                        <Typography variant="h4">Email: {userData['email']}</Typography>
+                    </>
+                    : null
+                }
+                </Box>
+            <Divider sx={{ my: 5 }} />
+            <ThemeProvider theme={redButtonTheme}>
+                <Button
+                    variant="contained"
+                    sx={{ width: '20%' }}
+                    onClick={() => {navigate('/logout/', {loggedIn: true});}}>Logout</Button>
+            </ThemeProvider>
+            </Box>
+        )
+    }
 
         return (
             <SideBar 

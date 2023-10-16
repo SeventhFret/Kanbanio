@@ -10,7 +10,8 @@ import { api } from "./ApiClient";
 import { Link, useNavigate } from "react-router-dom";
 
 
-export function LoginForm() {  
+export function LoginForm(props) {  
+    const { handleLoggedInChanged } = props;
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
@@ -32,11 +33,13 @@ export function LoginForm() {
                 setLoading(false);
                 localStorage.setItem("access", resp.data['access']);
                 localStorage.setItem("refresh", resp.data['refresh']);
-                navigate("/dashboard/", {loggedIn: true});
+                handleLoggedInChanged();
+                navigate("/dashboard/");
             }
         })
         .catch(error => {
             if (error) {
+                console.log(error);
                 setLoading(false);
                 setErrors(["Invalid username or password"]);
             }

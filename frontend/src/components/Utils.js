@@ -36,7 +36,7 @@ export const useApiNotes = (noteChanged) => {
                 "Authorization": "JWT " + localStorage.getItem("access")
             }
         })
-        .then(res => {setNotes(res.data)})
+        .then(res => {setNotes(res.data); console.log(res.data);})
         .catch(error => {console.log(error);})
 
     }, [noteChanged])

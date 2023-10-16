@@ -79,7 +79,7 @@ export default function SideBar({ userData, mainContent, isNotesPage, selected }
   let avatarUrl = "";
 
   if (userData) {
-    avatarUrl = "http://127.0.0.1:8000" + userData["avatar"];
+    avatarUrl = "https://vmd108176.contaboserver.net" + userData["avatar"];
   }
 
 
