@@ -22,27 +22,31 @@ export function DashboardPage({userData, loggedIn}) {
                 <Box sx={{ backgroundColor: 'black', p: 5, borderRadius: "15px", width: '50%' }}>
                     <Typography variant='h4'>Latest tasks</Typography>
                     <List>
-                       { latestTodos ? latestTodos.map((todo) => (
+                       { latestTodos.length > 0 ? latestTodos.map((todo) => (
                         <Link key={todo.id} to="/todos/" className='latest-todos-link'>
                             <ListItemButton sx={{ border: '1px solid white', borderRadius: '5px', mb: '1vh' }}>
                                 <Typography sx={{ maxWidth: '100%', overflow: 'auto' }}>{todo.title}</Typography>
                             </ListItemButton>
                         </Link>
                        ))
-                       : <ListItem>All clear!</ListItem> }
+                       : <ListItem>
+                          <Typography variant='h5'>All clear!</Typography>
+                        </ListItem> }
                     </List>
                 </Box>
 
                 <Box sx={{ backgroundColor: 'black', p: 5, borderRadius: "15px", width: '50%' }}>
-                    <Typography variant='h4' sx={{ mb: 1 }}>Notes</Typography>
-                    { latestNotes ? latestNotes.map((note) => (
+                    <Typography variant='h4' sx={{ mb: 1 }}>Latest notes</Typography>
+                    { latestNotes.length > 0 ? latestNotes.map((note) => (
                         <Link key={note.id} to="/notes/" className='latest-todos-link'>
                             <ListItemButton sx={{ border: '1px solid white', borderRadius: '5px', mb: '1vh' }}>
                                 <Typography sx={{ maxWidth: '100%', overflow: 'auto' }}>{note.title}</Typography>
                             </ListItemButton>
                         </Link>
                        ))
-                       : <ListItem>All clear!</ListItem> }
+                       : <ListItem>
+                          <Typography variant='h5'>All clear!</Typography>
+                        </ListItem> }
                 </Box>
             </Box>
         </div>
