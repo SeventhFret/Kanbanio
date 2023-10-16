@@ -42,14 +42,13 @@ function App() {
       .then(res => {setUserData(res.data.profile); console.log(res.data);})
       .catch(error => {
         if (error) {
-          // console.clear();
-          console.log(error);
+          console.clear();
           if (error.response) {
             if (error.response.status === 401) {
               getRefreshToken();
-              // setTimeout(() => {
-              //   window.location.reload();
-              // }, 1000)
+              setTimeout(() => {
+                window.location.reload();
+              }, 1000)
             }
           }
       }

@@ -95,12 +95,15 @@ export default function NotesExplorer(props) {
       <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
           <Typography variant='h5' p={2} flexGrow={1}>Notes</Typography>
           <Toolbar>
+            { folders.length > 0 ?
             <IconButton
             title='Create note'
             onClick={handleCreateNoteClicked}
             sx={{ height: '100%' }}>
               <NoteAddIcon />
             </IconButton>
+            : <Typography variant='subtitle2'>Add folder to create note</Typography>
+            }
           </Toolbar>
             { createNoteClicked ? 
             <NoteFormDialog
