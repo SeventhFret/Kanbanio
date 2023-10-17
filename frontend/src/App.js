@@ -32,7 +32,6 @@ function App() {
 
   
   useEffect(() => {
-    console.log(loggedIn);
     if (loggedIn) {
       api.get("/users/get/", {
         headers: {
